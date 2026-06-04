@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وش نلعب؟ — ألعاب البث</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0e0e10; --bg-2:#161618; --bg-3:#1d1d20; --line:#2a2a2f;
+    --ink:#f4f1ea; --ink-dim:#a8a39b; --ink-faint:#6b675f;
+    --c1:#ff8a1f; --c2:#4ec27c; --c3:#ff4757; --c4:#5b8dff; --c5:#ff4d8d;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body {
+    background:var(--bg); color:var(--ink);
+    font-family:'Readex Pro', sans-serif; font-weight:300;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  body::before {
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,138,31,0.08), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(91,141,255,0.06), transparent 40%);
+  }
+  body::after {
+    content:""; position:fixed; inset:0; z-index:1; pointer-events:none; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.045 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:0.6;
+  }
+  .flash-overlay { position:fixed; inset:0; background:var(--flash-color,transparent); pointer-events:none; z-index:99; opacity:0; }
+  .flash-overlay.flash { animation:flashAnim 0.6s ease-out; }
+  @keyframes flashAnim { 0%{opacity:0} 20%{opacity:0.25} 100%{opacity:0} }
+
+  .wrap { position:relative; z-index:2; max-width:1280px; margin:0 auto; padding:32px 28px 80px; }
+
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:18px; border-bottom:1px solid var(--line);
+    font-size:12px; letter-spacing:0.04em; color:var(--ink-dim); text-transform:uppercase;
+    flex-wrap:wrap; gap:10px;
+  }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand .dot { width:8px; height:8px; background:var(--c1); border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,138,31,0.6)} 50%{box-shadow:0 0 0 10px rgba(255,138,31,0)} }
+  .topbar .meta { display:flex; gap:20px; align-items:center; }
+  .topbar .meta span::before { content:""; display:inline-block; width:3px; height:3px; border-radius:50%; background:var(--ink-faint); margin-left:14px; vertical-align:middle; }
+  .topbar .meta span:first-child::before { display:none; }
+  .topbar .meta .live-count { color:var(--c1); font-weight:500; transition:color 0.3s; }
+  .topbar .meta .live-count.bump { animation:bump 0.5s ease-out; }
+  @keyframes bump { 0%{transform:scale(1)} 40%{transform:scale(1.35); color:var(--c5)} 100%{transform:scale(1)} }
+  .conn { display:inline-flex; align-items:center; gap:6px; }
+  .conn .led { width:7px; height:7px; border-radius:50%; background:var(--ink-faint); }
+  .conn.online .led { background:var(--c2); box-shadow:0 0 8px var(--c2); }
+  .conn.local .led { background:var(--c1); }
+
+  .hero { padding:70px 0 50px; }
+  .hero .kicker { font-size:13px; color:var(--c1); letter-spacing:0.2em; margin-bottom:22px; display:flex; align-items:center; gap:12px; }
+  .hero .kicker::after { content:""; flex:1; height:1px; background:var(--line); max-width:200px; }
+  .hero h1 { font-family:'Reem Kufi Fun',serif; font-weight:700; font-size:clamp(56px,9vw,132px); line-height:0.92; letter-spacing:-0.02em; }
+  .hero h1 .accent { color:var(--c1); font-style:italic; }
+  .hero h1 .outline { -webkit-text-stroke:1.5px var(--ink); color:transparent; }
+  .hero .lead { margin-top:32px; max-width:580px; font-size:18px; color:var(--ink-dim); line-height:1.7; }
+
+  .leader {
+    margin:50px 0 36px; background:var(--bg-2); border:1px solid var(--line); border-radius:4px;
+    padding:22px 28px; display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:center;
+    position:relative; overflow:hidden; transition:border-color 0.4s;
+  }
+  .leader.crowned { border-color:var(--leader-c); }
+  .leader::before { content:""; position:absolute; top:0; right:0; bottom:0; width:0; background:var(--leader-c,transparent); transition:width 0.6s cubic-bezier(.2,.7,.2,1); opacity:0.08; }
+  .leader.crowned::before { width:100%; }
+  .leader .label { font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-faint); display:flex; align-items:center; gap:8px; }
+  .leader .label .crown { color:var(--leader-c); transition:color 0.4s; }
+  .leader .name { font-family:'Reem Kufi Fun',sans-serif; font-size:22px; font-weight:600; transition:color 0.4s; }
+  .leader.crowned .name { color:var(--leader-c); }
+  .leader .count { font-family:'Rubik Mono One',monospace; font-size:28px; color:var(--leader-c,var(--c1)); transition:color 0.4s; }
+  .leader .count small { font-size:12px; color:var(--ink-dim); margin-right:6px; font-family:'Readex Pro',sans-serif; }
+  .leader.changed { animation:leaderShake 0.6s ease-out; }
+  @keyframes leaderShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  .games { display:grid; grid-template-columns:repeat(12,1fr); gap:20px; margin-top:20px; }
+  .game {
+    position:relative; background:var(--bg-2); border:1px solid var(--line); border-radius:6px;
+    padding:28px 26px 24px; overflow:hidden; display:flex; flex-direction:column;
+    transition:transform 0.4s cubic-bezier(.2,.7,.2,1), border-color 0.3s, box-shadow 0.3s;
+  }
+  .game:hover { transform:translateY(-4px); border-color:var(--accent); }
+  .game::before { content:""; position:absolute; top:0; right:0; left:0; height:3px; background:var(--accent); transform-origin:right; transform:scaleX(0.18); transition:transform 0.5s cubic-bezier(.2,.7,.2,1); }
+  .game:hover::before { transform:scaleX(1); }
+  .game.just-voted { animation:cardPulse 0.7s cubic-bezier(.2,.7,.2,1); border-color:var(--accent); }
+  @keyframes cardPulse { 0%{box-shadow:0 0 0 0 var(--accent); transform:translateY(0) scale(1)} 30%{box-shadow:0 0 0 16px transparent; transform:translateY(-6px) scale(1.015)} 100%{box-shadow:0 0 0 0 transparent; transform:translateY(0) scale(1)} }
+  .game.leading::before { height:4px; box-shadow:0 0 20px var(--accent); }
+  .game.leading { border-color:var(--accent); }
+
+  .game.s1{grid-column:span 7} .game.s2{grid-column:span 5}
+  .game.s3{grid-column:span 4} .game.s4{grid-column:span 4} .game.s5{grid-column:span 4}
+  @media (max-width:900px){ .game.s1,.game.s2,.game.s3,.game.s4,.game.s5{grid-column:span 12} }
+
+  .game .num { font-family:'Rubik Mono One',sans-serif; font-size:60px; line-height:1; color:transparent; -webkit-text-stroke:1.5px var(--accent); position:absolute; bottom:14px; left:22px; opacity:0.28; }
+  .game .icon { font-size:26px; margin-bottom:12px; }
+  .game h2 { font-family:'Reem Kufi Fun',sans-serif; font-weight:700; font-size:30px; letter-spacing:-0.01em; margin-bottom:10px; }
+  .game .tag { display:inline-block; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; padding:3px 10px; border:1px solid var(--accent); border-radius:999px; }
+  .game .idea { color:var(--ink); font-size:14px; line-height:1.5; margin-bottom:14px; font-weight:400; }
+  .game .simple { color:var(--ink-dim); font-size:14px; line-height:1.75; max-width:560px; padding:14px 0 0; border-top:1px dashed var(--line); flex:1; }
+  .game .simple .label { display:block; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+
+  .game .actions { display:flex; align-items:center; gap:10px; margin-top:22px; position:relative; z-index:2; }
+  .btn { border:1px solid var(--line); background:transparent; color:var(--ink); padding:11px 18px; border-radius:999px; font-family:'Readex Pro',sans-serif; font-size:13px; cursor:pointer; transition:all 0.25s; font-weight:400; white-space:nowrap; }
+  .btn:hover { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .btn.primary { background:var(--accent); color:#0a0a0c; border-color:var(--accent); font-weight:500; position:relative; }
+  .btn.primary:hover { filter:brightness(1.1); transform:translateY(-1px); box-shadow:0 6px 20px -8px var(--accent); }
+  .btn.primary:active { transform:translateY(0) scale(0.96); }
+  .btn.voted { background:transparent; color:var(--accent); border-color:var(--accent); cursor:default; }
+  .btn.voted::before { content:"✓ "; }
+
+  .vote-bar { margin-top:18px; height:6px; background:var(--bg-3); border-radius:3px; overflow:hidden; position:relative; }
+  .vote-bar .fill { height:100%; background:var(--accent); width:0%; transition:width 0.9s cubic-bezier(.2,.7,.2,1); position:relative; overflow:hidden; }
+  .vote-bar .fill::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation:shimmer 2.5s linear infinite; }
+  @keyframes shimmer { 0%{transform:translateX(100%)} 100%{transform:translateX(-100%)} }
+  .vote-meta { display:flex; justify-content:space-between; margin-top:8px; font-size:11px; letter-spacing:0.1em; color:var(--ink-faint); text-transform:uppercase; }
+  .vote-meta .pct { color:var(--accent); font-family:'Rubik Mono One',sans-serif; }
+  .vote-meta .count { display:inline-block; min-width:12px; }
+  .vote-meta .count.bump { animation:countBump 0.6s ease-out; color:var(--accent); }
+  @keyframes countBump { 0%{transform:scale(1)} 35%{transform:scale(1.6)} 100%{transform:scale(1)} }
+
+  .game.s1{--accent:var(--c1)} .game.s2{--accent:var(--c2)} .game.s3{--accent:var(--c3)} .game.s4{--accent:var(--c4)} .game.s5{--accent:var(--c5)}
+
+  .floater { position:fixed; pointer-events:none; font-family:'Rubik Mono One',sans-serif; font-size:38px; color:var(--accent); z-index:95; animation:floatUp 1.2s cubic-bezier(.2,.7,.2,1) forwards; text-shadow:0 0 20px currentColor; }
+  @keyframes floatUp { 0%{opacity:0; transform:translate(-50%,0) scale(0.5)} 20%{opacity:1; transform:translate(-50%,-20px) scale(1.2)} 100%{opacity:0; transform:translate(-50%,-120px) scale(1)} }
+
+  .confetti { position:fixed; width:8px; height:14px; pointer-events:none; z-index:94; border-radius:2px; animation:confettiFall 1.4s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes confettiFall { 0%{opacity:1; transform:translate(0,0) rotate(0deg)} 100%{opacity:0; transform:translate(var(--dx),var(--dy)) rotate(var(--r))} }
+
+  .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:50; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  .modal-backdrop.open { opacity:1; pointer-events:auto; }
+  .modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-48%); width:min(880px,calc(100vw - 32px)); max-height:86vh; background:var(--bg-2); border:1px solid var(--line); border-radius:8px; z-index:51; opacity:0; pointer-events:none; transition:opacity 0.3s, transform 0.3s; overflow:hidden; display:flex; flex-direction:column; }
+  .modal.open { opacity:1; pointer-events:auto; transform:translate(-50%,-50%); }
+  .modal .head { padding:28px 32px 24px; border-bottom:1px solid var(--line); background:var(--bg-3); position:relative; }
+  .modal .head .bar { position:absolute; top:0; right:0; left:0; height:3px; background:var(--accent); }
+  .modal .head .tag { display:inline-block; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); padding:4px 10px; border:1px solid var(--accent); border-radius:999px; margin-bottom:14px; }
+  .modal .head h2 { font-family:'Reem Kufi Fun',sans-serif; font-weight:700; font-size:38px; letter-spacing:-0.01em; }
+  .modal .close { position:absolute; top:22px; left:22px; background:transparent; border:1px solid var(--line); color:var(--ink); width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:18px; line-height:1; transition:all 0.2s; }
+  .modal .close:hover { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .modal .body { padding:28px 32px 32px; overflow-y:auto; flex:1; }
+  .modal .body::-webkit-scrollbar { width:8px; }
+  .modal .body::-webkit-scrollbar-thumb { background:var(--line); border-radius:4px; }
+  .section { margin-bottom:28px; }
+  .section h3 { font-family:'Reem Kufi Fun',sans-serif; font-size:18px; font-weight:600; color:var(--accent); margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+  .section h3::before { content:""; width:24px; height:1px; background:var(--accent); }
+  .section p { color:var(--ink-dim); line-height:1.8; font-size:15px; }
+  .section ol { list-style:none; counter-reset:step; }
+  .section ol li { counter-increment:step; padding:12px 0 12px 44px; border-bottom:1px dashed var(--line); position:relative; color:var(--ink); font-size:15px; line-height:1.7; }
+  .section ol li:last-child { border-bottom:0; }
+  .section ol li::before { content:counter(step,arabic-indic); position:absolute; right:0; top:12px; font-family:'Rubik Mono One',sans-serif; color:var(--accent); width:28px; height:28px; display:grid; place-items:center; border:1px solid var(--accent); border-radius:50%; font-size:12px; }
+  .example-box { background:var(--bg); border:1px solid var(--line); border-right:3px solid var(--accent); border-radius:4px; padding:18px 22px; margin-top:12px; }
+  .example-box .row { display:grid; grid-template-columns:130px 1fr; gap:14px; padding:8px 0; border-bottom:1px dashed var(--line); font-size:14px; }
+  .example-box .row:last-child { border-bottom:0; }
+  .example-box .row .k { color:var(--ink-faint); font-size:12px; letter-spacing:0.1em; text-transform:uppercase; }
+  .example-box .row .v { color:var(--ink); }
+  .example-box .row .v .forbidden { color:var(--accent); }
+  .modal .foot { padding:18px 32px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:16px; background:var(--bg-3); }
+  .modal .foot .count-display { font-size:13px; color:var(--ink-dim); }
+  .modal .foot .count-display strong { color:var(--accent); font-family:'Rubik Mono One',sans-serif; font-size:18px; margin:0 6px; }
+
+  footer.site-foot { margin-top:80px; padding-top:28px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--ink-faint); letter-spacing:0.08em; }
+  footer.site-foot .signature { font-family:'Reem Kufi Fun',sans-serif; color:var(--ink); font-size:14px; }
+  footer.site-foot .signature .at { color:var(--c5); }
+
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:14px 22px; border-radius:999px; font-size:14px; font-weight:500; z-index:100; opacity:0; pointer-events:none; transition:all 0.3s cubic-bezier(.2,.7,.2,1); }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  .setup-banner { background:rgba(255,138,31,0.08); border:1px solid var(--c1); border-radius:6px; padding:14px 18px; margin-top:20px; font-size:13px; color:var(--c1); line-height:1.6; }
+  .setup-banner code { background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:3px; font-family:monospace; }
+
+  @keyframes rise { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+  .game { animation:rise 0.7s cubic-bezier(.2,.7,.2,1) backwards; }
+  .game.s1{animation-delay:0.05s} .game.s2{animation-delay:0.12s} .game.s3{animation-delay:0.19s} .game.s4{animation-delay:0.26s} .game.s5{animation-delay:0.33s}
+  .hero h1 { animation:rise 0.9s cubic-bezier(.2,.7,.2,1) backwards; }
+  .hero .lead { animation:rise 1s 0.2s cubic-bezier(.2,.7,.2,1) backwards; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><span>ألعاب البث • LIVE GAMES</span></div>
+    <div class="meta">
+      <span class="conn" id="conn"><span class="led"></span><span id="connText">يربط...</span></span>
+      <span class="live-count" id="totalVotes">٠ صوت</span>
+      <span>٥ ألعاب</span>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="kicker">صوّت • شارك • العب</div>
+    <h1>وش <span class="accent">نلعب</span><br>اليوم<span class="outline">؟</span></h1>
+    <p class="lead">خمس ألعاب جاهزة، كلها تتلعب جماعياً وما تحتاج إلا جوالك. اقرأ شرح كل لعبة، اختار اللي يعجبك، وصوّت </p>
+    <div class="setup-banner" id="setupBanner" style="display:none;">
+      ⚙️ التصويت يشتغل محلياً فقط (هذا الجهاز). عشان يتزامن بين كل الأجهزة، عبّي إعدادات Firebase في أعلى السكربت — راجع التعليمات.
+    </div>
+  </section>
+
+  <div class="leader" id="leaderEl">
+    <div>
+      <div class="label"><span class="crown">👑</span> المتصدّر حالياً</div>
+      <div class="name" id="leaderName">—</div>
+    </div>
+    <div></div>
+    <div class="count" id="leaderCount"><small>أصوات</small>٠</div>
+  </div>
+
+  <section class="games" id="gamesGrid"></section>
+
+  <footer class="site-foot">
+  </footer>
+</div>
+
+<div class="flash-overlay" id="flash"></div>
+<div class="modal-backdrop" id="backdrop"></div>
+<div class="modal" id="modal">
+  <div class="head"><div class="bar"></div><button class="close" id="closeBtn">×</button><div class="tag" id="mTag"></div><h2 id="mTitle"></h2></div>
+  <div class="body" id="mBody"></div>
+  <div class="foot">
+    <div class="count-display"><span>عدد الأصوات الحالية:</span><strong id="mCount">٠</strong></div>
+    <button class="btn primary" id="mVoteBtn">صوّت لهالّلعبة</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  /* ═══════════════════════════════════════════════════════════════
+     ١) إعدادات Firebase — عبّي القيم من Console → Project Settings
+     ═══════════════════════════════════════════════════════════════
+     خطوات سريعة:
+       1. افتح console.firebase.google.com وأنشئ مشروع (أو استخدم واحد عندك)
+       2. Build → Realtime Database → Create Database → ابدأ بوضع "test mode"
+       3. Project Settings → Your apps → Web app → انسخ القيم وحطها تحت
+       4. (مهم) في Realtime Database → Rules، خل القواعد:
+            { "rules": { "votes": { ".read": true, ".write": true } } }
+          هذا كافي لليلة ألعاب. لو تبي حماية أكثر استخدم Anonymous Auth.
+  ═══════════════════════════════════════════════════════════════ */
+  const firebaseConfig = {
+    apiKey: "AIzaSyCoyzXIoSXD6tvclr8EjDF0TdWfPlCJY5Y",
+    authDomain: "game-night-a9707.firebaseapp.com",
+    databaseURL: "https://game-night-a9707-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "game-night-a9707",
+    storageBucket: "game-night-a9707.firebasestorage.app",
+    messagingSenderId: "943803230538",
+    appId: "1:943803230538:web:e42c5ea165b09f3d6fb9b3",
+    measurementId: "G-8ZXMD4LPKH"
+  };
+
+  // ============ DATA ============
+  const games = [
+    { id:'g1', size:'s1', num:'٠١', icon:'📋', tag:'CLASSIFICATION RACE', title:'سباق التصنيف',
+      idea:'اكتب أكبر عدد ممكن من الإجابات في ٣٠ ثانية!',
+      simple:'تخيّل إنك في المدرسة والمعلم قال لك: اكتب كل الفواكه اللي تعرفها في نص دقيقة. من يكتب أكثر يفوز! هذي هي اللعبة بالضبط — أنا أعطيك فئة (مثلاً "دول عربية" أو "أكلات سعودية") وأنت تكتب أكبر عدد ممكن قبل ما ينتهي الوقت.',
+      steps:['الهوست سعود يعلن فئة — مثلاً: دول عربية أو أكلات سعودية','العداد يبدأ من ٣٠ ثانية','كل لاعب يكتب أكبر عدد ممكن من الإجابات بسرعة','لما ينتهي الوقت النظام يحسب الإجابات الصحيحة','اللي عنده أكثر إجابات صحيحة يفوز'],
+      rules:['⭐ إجابة ذكرها لاعب وحده = ضعف النقاط','❌ إجابة غلط = نقطة تخصم منك'],
+      example:{ title:'الفئة: أكلات سعودية', rows:[['سعد كتب','كبسة، مندي، جريش، هريسة، مطبق = ٥ إجابات'],['نورة كتبت','كبسة، مندي، سليق، مرق، جريش = ٥ إجابات'],['نتيجة سعد','سعد كتب مطبق وما أحد غيره كتبها = نقاط مضاعفة!']] } },
+
+    { id:'g2', size:'s2', num:'٠٢', icon:'🔤', tag:'WORD CHAIN', title:'سباق الكلمات',
+      idea:'كل واحد يكمل بكلمة تبدأ بآخر حرف من اللي قبله!',
+      simple:'تخيّل إنك تلعب مع أصحابك وكل واحد لازم يكمل على الثاني. قال الأول "رمضان" — اللي بعده لازم يقول كلمة تبدأ بـ "ن"، مثلاً "نخلة". اللي بعده يبدأ بـ "ة" ← "ل" مثلاً "لون"... وهكذا. من يتوقف أو يكرر يخرج من اللعبة.',
+      steps:['الهوست سعود يبدأ بكلمة','كل لاعب عنده ١٥ ثانية يكتب كلمة','الكلمة لازم تبدأ بآخر حرف من الكلمة اللي قبلها','اللي يتأخر أو يكرر كلمة يطلع من اللعبة','آخر لاعب يبقى هو الفايز'],
+      rules:['⏰ تجاوز الوقت ١٥ ثانية = طرد','🔁 تكرار كلمة قيلت قبل = طرد','❌ كلمة ما تبدأ بالحرف الصحيح = طرد','📝 قاعدة التاء المربوطة: لو الكلمة تنتهي بـ "ة" — اللي بعدك يكمل من الحرف اللي قبلها مباشرة (مثلاً: لعبة ← ب)'],
+      example:{ title:'مثال على جولة', rows:[['سعود يبدأ','رمضان'],['لاعب ١','نخلة ← الحرف التالي ل'],['لاعب ٢','لعبة ← الحرف التالي ب'],['لاعب ٣','بطيخ ← الحرف التالي خ'],['لاعب ٤','خروف ← الحرف التالي ف'],['لاعب ٣','تأخر ولم يجاوب → يطلع']] } },
+
+    { id:'g3', size:'s3', num:'٠٣', icon:'⚔️', tag:'TEAM WAR', title:'حرب الفرق',
+      idea:'فريقين يتنافسون والخاسر يطيح منه لاعب كل جولة!',
+      simple:'تخيّل مباراة كرة قدم — بس بدل ما تركض تجاوب أسئلة. النظام يقسمنا فريقين تلقائياً، يطرح سؤال، وكل فريق يجاوب بالأغلبية. الفريق اللي يخسر يطيح منه لاعب عشوائي. آخر فريق يبقى واقف يفوز.',
+      steps:['الهوست سعود يقسم اللاعبين فريقين أو ثلاثة تلقائياً','يطرح سؤال على الجميع وعندهم ٢٠ ثانية','كل لاعب يجاوب بشكل فردي','إجابة الفريق = اللي اختارتها الأغلبية','الفريق الخاسر يطيح منه لاعب عشوائي','آخر فريق يبقى واقف يفوز'],
+      example:{ title:'السؤال: ما عاصمة أستراليا؟', rows:[['الخيارات','أ) سيدني  ب) ملبورن  ج) كانبيرا  د) بريسبان'],['الفريق الأحمر','سعد: ج • محمد: أ • نورة: ج • ريم: ج'],['إجابة الأحمر','ج — أغلبية ٣ من ٤ — صح ✓'],['الفريق الأزرق','خالد: أ • فهد: أ • سارة: ج'],['إجابة الأزرق','أ — أغلبية ٢ من ٣ — غلط ✗'],['النتيجة','لاعب عشوائي من الأزرق يطيح']] } },
+
+    { id:'g4', size:'s4', num:'٠٤', icon:'📖', tag:'COLLECTIVE STORY', title:'قصة جماعية',
+      idea:'كل لاعب يضيف جملة وحدة تكمل قصة مضحكة!',
+      simple:'تخيّل إنك تكتب قصة مع أصحابك — كل واحد يضيف جملة وحدة بس. النتيجة دايماً تطلع مضحكة أو غريبة لأن كل شخص يفكر بطريقة مختلفة. في النهاية نقرأ القصة كاملة ونصوّت على أحسن إضافة.',
+      steps:['الهوست سعود يبدأ القصة بجملة وحدة','كل لاعب عنده ٣٠ ثانية يضيف جملة تكمل القصة','الجملة لازم تكمل القصة وما تتناقض معها','في النهاية الهوست سعود يقرأ القصة كاملة','التصويت يحدد أحسن وأضحك إضافة'],
+      example:{ title:'مثال على قصة', rows:[['سعود يبدأ','خالد طلب أكل من التطبيق وقاعد ينتظر من ساعة'],['لاعب ١','فتح التطبيق لقى المندوب واقف قدام بيت ثاني'],['لاعب ٢','اتصل فيه المندوب قاله أنا واقف من نص ساعة'],['لاعب ٣','خالد نزل لقى المندوب في الشارع الغلط كلياً'],['لاعب ٤','المندوب قاله الموقع اللي حطيته جابني هنا'],['لاعب ١','خالد شاف الموقع لقى إنه حاط موقع بيت صديقه بالغلط!']] } },
+
+    { id:'g5', size:'s5', num:'٠٥', icon:'🚫', tag:'FORBIDDEN WORDS', title:'الكلمات المحظورة',
+      idea:'اشرح كلمة سرية بدون ما تقول قائمة كلمات محظورة!',
+      simple:'تخيّل إنك تشرح "البيتزا" لصديقك بس ممنوع تقول: إيطاليا، جبن، فرن، دائرية، وجبة. صعب صح؟ هذي هي المتعة! تعطى كلمة سرية وقائمة كلمات ممنوعة، وتشرحها بأي طريقة ثانية. أول واحد يخمن صح يأخذ النقاط.',
+      steps:['الهوست سعود يعطي لاعب كلمة سرية وقائمة كلمات محظورة','اللاعب يشرح الكلمة للبقية بأي طريقة','ما يقدر يقول أي كلمة من القائمة المحظورة','البقية عندهم ٦٠ ثانية يخمنون','أول واحد يخمن صح يأخذ النقاط','لو قال اللاعب كلمة محظورة يخسر دوره'],
+      example:{ title:'الكلمة السرية: برج إيفل', rows:[['المحظورة','فرنسا، باريس، برج، حديد، سياحة'],['الشرح الصح','"بناء ضخم جداً رمز لدولة أوروبية، بنوه في القرن التاسع عشر، الناس يصورون قدامه، موجود في عاصمة الموضة والعطور"'],['لاعب ١','"برج إيفل" ← يأخذ النقاط ✓']] },
+      moreExamples:[['القهوة','مشروب، بن، حار، كافيه، صباح'],['الكعبة','مكة، حج، إسلام، طواف، مسجد'],['الجمل','صحراء، حيوان، سنام، عرب، ركوب'],['البيتزا','إيطاليا، جبن، فرن، دائرية، وجبة']] }
+  ];
+
+  const colorMap = { g1:'#ff8a1f', g2:'#4ec27c', g3:'#ff4757', g4:'#5b8dff', g5:'#ff4d8d' };
+
+  // ============ STATE ============
+  let votes = { g1:0, g2:0, g3:0, g4:0, g5:0 };
+  let userVotedFor = null;
+  let currentModalGame = null;
+  let previousLeader = null;
+  let mode = 'local'; // 'firebase' | 'local'
+
+  // ============ STORAGE LAYER ============
+  // local helpers (per device) for voter identity + their current choice
+  function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return (window._mem||{})[k] || null; } }
+  function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ (window._mem=window._mem||{})[k]=v; } }
+
+  function getMyVote(){ return lsGet('gn_my_vote'); }
+  function setMyVote(v){ lsSet('gn_my_vote', v); }
+
+  let db = null, dbRefs = null;
+
+  async function initStorage() {
+    const configured = !Object.values(firebaseConfig).some(v => String(v).includes('REPLACE_ME'));
+    userVotedFor = getMyVote();
+
+    if (configured) {
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js");
+        const { getDatabase, ref, onValue, runTransaction } =
+          await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js");
+
+        const app = initializeApp(firebaseConfig);
+        db = getDatabase(app);
+        dbRefs = { ref, onValue, runTransaction };
+        mode = 'firebase';
+
+        // connection status
+        onValue(ref(db, '.info/connected'), (snap) => {
+          setConn(snap.val() === true ? 'online' : 'local',
+                  snap.val() === true ? 'مباشر' : 'يحاول الاتصال');
+        });
+
+        // live listener on votes — instant sync across all devices
+        onValue(ref(db, 'votes'), (snap) => {
+          const fresh = snap.val() || {};
+          const merged = { g1:0, g2:0, g3:0, g4:0, g5:0, ...fresh };
+          const old = { ...votes };
+          votes = merged;
+          let changed = null;
+          for (const g of games) if ((votes[g.id]||0) > (old[g.id]||0)) changed = g.id;
+          updateVoteUI(true, changed);
+        });
+        return;
+      } catch (e) {
+        console.error('Firebase init failed, falling back to local:', e);
+      }
+    }
+
+    // ---- LOCAL FALLBACK (single device / preview) ----
+    mode = 'local';
+    setConn('local', 'محلي');
+    document.getElementById('setupBanner').style.display = 'block';
+    try {
+      const saved = lsGet('gn_votes');
+      if (saved) votes = { g1:0,g2:0,g3:0,g4:0,g5:0, ...JSON.parse(saved) };
+    } catch(e){}
+    updateVoteUI(false);
+  }
+
+  async function pushVote(gameId, prevGameId) {
+    if (mode === 'firebase') {
+      const { ref, runTransaction } = dbRefs;
+      await runTransaction(ref(db, 'votes/' + gameId), (cur) => (cur || 0) + 1);
+      if (prevGameId && prevGameId !== gameId) {
+        await runTransaction(ref(db, 'votes/' + prevGameId), (cur) => Math.max(0, (cur || 0) - 1));
+      }
+      // UI updates arrive via the onValue listener
+    } else {
+      votes[gameId] = (votes[gameId]||0) + 1;
+      if (prevGameId && prevGameId !== gameId) votes[prevGameId] = Math.max(0, (votes[prevGameId]||0) - 1);
+      lsSet('gn_votes', JSON.stringify(votes));
+      updateVoteUI(true, gameId);
+    }
+  }
+
+  function setConn(state, text) {
+    const el = document.getElementById('conn');
+    el.classList.remove('online','local');
+    el.classList.add(state);
+    document.getElementById('connText').textContent = text;
+  }
+
+  // ============ HELPERS ============
+  function ar(n){ return String(n).replace(/[0-9]/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
+
+  // ============ AUDIO ============
+  let audioCtx = null;
+  function getAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+  function playChord(notes, type, gainMax, step, dur){
+    const ctx = getAudio(); if(!ctx) return;
+    notes.forEach((freq,i)=>{
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = type;
+      const t = ctx.currentTime + i*step;
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(gainMax, t+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t+dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t); osc.stop(t+dur+0.05);
+    });
+  }
+  const playVoteSound = () => playChord([523.25,659.25,783.99],'sine',0.15,0.07,0.4);
+  const playLeaderSound = () => playChord([440,554.37,659.25,880],'triangle',0.18,0.08,0.5);
+
+  // ============ EFFECTS ============
+  function vibrate(p){ if(navigator.vibrate) navigator.vibrate(p); }
+  function screenFlash(color){ const f=document.getElementById('flash'); f.style.setProperty('--flash-color',color); f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }
+  function fireConfetti(x,y,color,count=22){
+    for(let i=0;i<count;i++){
+      const c=document.createElement('div'); c.className='confetti';
+      c.style.left=x+'px'; c.style.top=y+'px';
+      c.style.background = i%3===0?'#fff':(i%3===1?color:'#f4f1ea');
+      const angle=(Math.random()*Math.PI)-Math.PI/2, dist=120+Math.random()*200;
+      c.style.setProperty('--dx',Math.cos(angle)*dist+'px');
+      c.style.setProperty('--dy',(Math.sin(angle)*dist+80)+'px');
+      c.style.setProperty('--r',(Math.random()*720-360)+'deg');
+      c.style.animationDelay=(Math.random()*0.1)+'s';
+      document.body.appendChild(c); setTimeout(()=>c.remove(),1600);
+    }
+  }
+  function bigCelebration(color){
+    [0.2,0.4,0.5,0.6,0.8].forEach((p,i)=>setTimeout(()=>fireConfetti(innerWidth*p, innerHeight*0.3, color, 18), i*80));
+  }
+  function floatPlusOne(x,y,color){
+    const f=document.createElement('div'); f.className='floater'; f.textContent='+١';
+    f.style.left=x+'px'; f.style.top=y+'px'; f.style.setProperty('--accent',color);
+    document.body.appendChild(f); setTimeout(()=>f.remove(),1300);
+  }
+  function bumpElement(el){ if(!el) return; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+  function animateCount(el, from, to, duration=600){
+    const start=performance.now();
+    const tick=(now)=>{ const t=Math.min(1,(now-start)/duration); const e=1-Math.pow(1-t,3);
+      el.textContent=ar(Math.round(from+(to-from)*e)); if(t<1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+
+  // ============ RENDER ============
+  function renderGames(){
+    const grid=document.getElementById('gamesGrid');
+    grid.innerHTML = games.map(g=>`
+      <article class="game ${g.size}" data-id="${g.id}">
+        <div class="icon">${g.icon}</div>
+        <span class="tag">${g.tag}</span>
+        <h2>${g.title}</h2>
+        <p class="idea">${g.idea}</p>
+        <p class="simple"><span class="label">شرح مبسّط</span>${g.simple}</p>
+        <div class="actions">
+          <button class="btn open-btn" data-id="${g.id}">شوف التفاصيل ←</button>
+          <button class="btn ${userVotedFor===g.id?'voted':'primary'} vote-btn" data-id="${g.id}">${userVotedFor===g.id?'صوّتك مسجّل':'صوّت 🔥'}</button>
+        </div>
+        <div class="vote-bar"><div class="fill" id="fill-${g.id}"></div></div>
+        <div class="vote-meta">
+          <span><span class="count count-${g.id}" id="cnt-${g.id}">٠</span> صوت</span>
+          <span class="pct" id="pct-${g.id}">٠٪</span>
+        </div>
+        <div class="num">${g.num}</div>
+      </article>`).join('');
+    grid.querySelectorAll('.open-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); openModal(b.dataset.id);}));
+    grid.querySelectorAll('.vote-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); castVote(b.dataset.id, b);}));
+  }
+
+  function updateVoteUI(animated=false, changedId=null){
+    const total = Object.values(votes).reduce((a,b)=>a+(b||0),0);
+    const totalEl=document.getElementById('totalVotes');
+    totalEl.textContent=`${ar(total)} صوت`; if(animated) bumpElement(totalEl);
+
+    let leaderId=null, leaderMax=-1;
+    games.forEach(g=>{ if((votes[g.id]||0)>leaderMax){ leaderMax=votes[g.id]||0; leaderId=g.id; } });
+
+    const leaderEl=document.getElementById('leaderEl');
+    if(total===0){
+      document.getElementById('leaderName').textContent='— لا تصويتات بعد —';
+      document.getElementById('leaderCount').innerHTML='<small>أصوات</small>٠';
+      leaderEl.classList.remove('crowned'); previousLeader=null;
+    } else {
+      const leader=games.find(g=>g.id===leaderId);
+      document.getElementById('leaderName').textContent=leader.title;
+      document.getElementById('leaderCount').innerHTML=`<small>أصوات</small>${ar(leaderMax)}`;
+      leaderEl.style.setProperty('--leader-c',colorMap[leaderId]);
+      leaderEl.classList.add('crowned');
+      if(animated && previousLeader && previousLeader!==leaderId){
+        leaderEl.classList.remove('changed'); void leaderEl.offsetWidth; leaderEl.classList.add('changed');
+        bigCelebration(colorMap[leaderId]); playLeaderSound();
+        showToast(`👑 "${leader.title}" تصدّرت!`);
+      }
+      previousLeader=leaderId;
+    }
+
+    games.forEach(g=>{
+      const count=votes[g.id]||0;
+      const pct = total===0?0:Math.round((count/total)*100);
+      const fill=document.getElementById(`fill-${g.id}`);
+      const pctEl=document.getElementById(`pct-${g.id}`);
+      const cntEl=document.getElementById(`cnt-${g.id}`);
+      const card=document.querySelector(`.game[data-id="${g.id}"]`);
+      if(fill) fill.style.width=pct+'%';
+      if(pctEl) pctEl.textContent=ar(pct)+'٪';
+      if(cntEl){
+        if(animated && g.id===changedId){
+          const prev=parseInt(cntEl.dataset.prev||'0',10);
+          animateCount(cntEl, prev, count); bumpElement(cntEl);
+          if(card){ card.classList.remove('just-voted'); void card.offsetWidth; card.classList.add('just-voted'); }
+        } else { cntEl.textContent=ar(count); }
+        cntEl.dataset.prev=count;
+      }
+      if(card){ (g.id===leaderId && total>0) ? card.classList.add('leading') : card.classList.remove('leading'); }
+    });
+
+    if(currentModalGame) document.getElementById('mCount').textContent=ar(votes[currentModalGame]||0);
+  }
+
+  // ============ VOTE ============
+  async function castVote(gameId, originBtn){
+    if(userVotedFor===gameId){ showToast('صوّتك مسجّل مسبقاً 👌'); vibrate(50); return; }
+    const prevVote=userVotedFor;
+    userVotedFor=gameId; setMyVote(gameId);
+
+    // immediate hype for the voter
+    const color=colorMap[gameId];
+    vibrate([30,40,80]); playVoteSound(); screenFlash(color);
+    if(originBtn){
+      const r=originBtn.getBoundingClientRect();
+      fireConfetti(r.left+r.width/2, r.top+r.height/2, color, 28);
+      floatPlusOne(r.left+r.width/2, r.top+r.height/2-10, color);
+    }
+    // update buttons immediately (counts come from storage)
+    renderGames();
+    updateModalVoteBtn();
+
+    try { await pushVote(gameId, prevVote); } catch(e){ console.error(e); showToast('صار خطأ بالاتصال، حاول مرة ثانية'); }
+
+    const g=games.find(x=>x.id===gameId);
+    showToast(`🔥 صوّتك انسجل لـ "${g.title}"`);
+  }
+
+  // ============ MODAL ============
+  function openModal(gameId){
+    const g=games.find(x=>x.id===gameId); if(!g) return;
+    currentModalGame=gameId; const color=colorMap[gameId];
+    document.getElementById('modal').style.setProperty('--accent',color);
+    document.querySelector('.modal-backdrop').style.setProperty('--accent',color);
+    document.getElementById('mTag').textContent=g.tag;
+    document.getElementById('mTitle').textContent=g.title;
+
+    let body=`<div class="section"><h3>الفكرة</h3><p>${g.idea}</p></div>
+      <div class="section"><h3>شرح مبسّط</h3><p>${g.simple}</p></div>
+      <div class="section"><h3>خطوات اللعبة</h3><ol>${g.steps.map(s=>`<li>${s}</li>`).join('')}</ol></div>`;
+    if(g.rules?.length){
+      body+=`<div class="section"><h3>قواعد مهمة</h3><ul style="list-style:none;padding:0;">${g.rules.map(r=>`<li style="padding:8px 0;color:var(--ink-dim);line-height:1.7;font-size:14px;">${r}</li>`).join('')}</ul></div>`;
+    }
+    if(g.example){
+      body+=`<div class="section"><h3>${g.example.title}</h3><div class="example-box">${g.example.rows.map(([k,v])=>`<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div></div>`;
+    }
+    if(g.moreExamples){
+      body+=`<div class="section"><h3>أمثلة إضافية</h3><div class="example-box">${g.moreExamples.map(([w,f])=>`<div class="row"><span class="k">${w}</span><span class="v"><span class="forbidden">محظور:</span> ${f}</span></div>`).join('')}</div></div>`;
+    }
+    document.getElementById('mBody').innerHTML=body;
+    document.getElementById('mCount').textContent=ar(votes[gameId]||0);
+    updateModalVoteBtn();
+    document.getElementById('backdrop').classList.add('open');
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function updateModalVoteBtn(){
+    const btn=document.getElementById('mVoteBtn');
+    if(userVotedFor===currentModalGame){ btn.classList.remove('primary'); btn.classList.add('voted'); btn.textContent='✓ صوّتك مسجّل'; }
+    else { btn.classList.add('primary'); btn.classList.remove('voted'); btn.textContent='صوّت لهالّلعبة 🔥'; }
+  }
+  function closeModal(){
+    document.getElementById('backdrop').classList.remove('open');
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow=''; currentModalGame=null;
+  }
+  document.getElementById('closeBtn').addEventListener('click',closeModal);
+  document.getElementById('backdrop').addEventListener('click',closeModal);
+  document.getElementById('mVoteBtn').addEventListener('click',e=>{ if(currentModalGame) castVote(currentModalGame, e.currentTarget); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+  function showToast(msg){
+    const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
+  }
+
+  // ============ INIT ============
+  renderGames();
+  updateVoteUI(false);
+  initStorage();
+</script>
+</body>
+</html>
