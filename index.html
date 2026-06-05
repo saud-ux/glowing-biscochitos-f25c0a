@@ -294,6 +294,102 @@
   .game.s1{animation-delay:0.05s}.game.s2{animation-delay:0.12s}.game.s3{animation-delay:0.19s}.game.s4{animation-delay:0.26s}.game.s5{animation-delay:0.33s}
   .hero h1{animation:rise 0.9s cubic-bezier(.2,.7,.2,1) backwards;}
   .hero .lead{animation:rise 1s 0.2s cubic-bezier(.2,.7,.2,1) backwards;}
+
+  /* === SHARE === */
+  .share-float{
+    position:fixed;bottom:28px;right:24px;z-index:49;
+    background:var(--c4);color:#0a0a0c;border:0;border-radius:999px;
+    padding:12px 22px;font-family:'Readex Pro',sans-serif;
+    font-size:14px;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;gap:8px;
+    box-shadow:0 8px 32px -8px rgba(91,141,255,0.55);
+    transition:all 0.25s;
+  }
+  .share-float:hover{transform:translateY(-3px);box-shadow:0 14px 40px -8px rgba(91,141,255,0.7);}
+  .share-float .sf-icon{font-size:17px;}
+  .share-backdrop{
+    position:fixed;inset:0;background:rgba(0,0,0,0.72);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    z-index:54;opacity:0;pointer-events:none;transition:opacity 0.3s;
+  }
+  .share-backdrop.open{opacity:1;pointer-events:auto;}
+  .share-modal{
+    position:fixed;top:50%;left:50%;
+    transform:translate(-50%,-48%);
+    width:min(460px,calc(100vw - 32px));
+    background:var(--bg-2);border:1px solid var(--line);
+    border-radius:12px;z-index:55;
+    opacity:0;pointer-events:none;
+    transition:opacity 0.3s,transform 0.3s;overflow:hidden;
+  }
+  .share-modal::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--c4),var(--c5));
+  }
+  .share-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%);}
+  .sm-head{
+    padding:18px 22px;display:flex;align-items:center;
+    justify-content:space-between;border-bottom:1px solid var(--line);
+    background:var(--bg-3);
+  }
+  .sm-head span{font-family:'Reem Kufi Fun',sans-serif;font-size:18px;font-weight:700;}
+  .sm-close{
+    background:transparent;border:1px solid var(--line);color:var(--ink);
+    width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;transition:all 0.2s;
+  }
+  .sm-close:hover{background:var(--ink);color:var(--bg);}
+  .sm-body{padding:22px;display:flex;flex-direction:column;align-items:center;gap:18px;}
+  .sm-qr{
+    background:var(--bg-3);border:1px solid var(--line);
+    border-radius:12px;padding:14px;
+  }
+  .sm-qr img{display:block;border-radius:6px;}
+  .sm-url{
+    width:100%;display:flex;align-items:center;gap:8px;
+    background:var(--bg);border:1px solid var(--line);
+    border-radius:8px;padding:11px 14px;
+  }
+  .sm-url .url-text{
+    flex:1;font-size:12px;color:var(--ink-dim);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    direction:ltr;text-align:left;
+  }
+  .url-copy-btn{
+    background:var(--c4);color:#0a0a0c;border:0;
+    padding:7px 14px;border-radius:999px;
+    font-family:'Readex Pro',sans-serif;font-size:12px;font-weight:600;
+    cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;
+  }
+  .url-copy-btn:hover{filter:brightness(1.1);}
+  .url-copy-btn.copied{background:var(--c2);}
+  .sm-divider{
+    width:100%;display:flex;align-items:center;gap:12px;
+    font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faint);
+  }
+  .sm-divider::before,.sm-divider::after{content:"";flex:1;height:1px;background:var(--line);}
+  .sm-socials{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .sm-socials.solo{grid-template-columns:1fr;}
+  .soc-btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 14px;border-radius:8px;border:1px solid var(--line);
+    background:var(--bg-3);color:var(--ink);
+    font-family:'Readex Pro',sans-serif;font-size:13px;font-weight:500;
+    cursor:pointer;transition:all 0.2s;text-decoration:none;white-space:nowrap;
+  }
+  .soc-btn:hover{transform:translateY(-2px);}
+  .soc-btn.wa{border-color:#25D366;color:#25D366;}
+  .soc-btn.wa:hover{background:rgba(37,211,102,0.08);}
+  .soc-btn.tw{border-color:#e7e7e7;color:#e7e7e7;}
+  .soc-btn.tw:hover{background:rgba(231,231,231,0.06);}
+  .soc-btn.tg{border-color:#0088CC;color:#0088CC;}
+  .soc-btn.tg:hover{background:rgba(0,136,204,0.08);}
+  .soc-btn.snap{border-color:#FFFC00;color:#FFFC00;}
+  .soc-btn.snap:hover{background:rgba(255,252,0,0.06);}
+  .soc-btn.native{
+    background:var(--c4);color:#0a0a0c;border-color:var(--c4);
+    font-weight:600;font-size:14px;padding:15px;
+  }
+  .soc-btn.native:hover{filter:brightness(1.1);transform:translateY(-2px);}
 </style>
 </head>
 <body>
@@ -426,6 +522,32 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- SHARE FLOAT BUTTON -->
+<button class="share-float" id="shareFloatBtn">
+  <span class="sf-icon">📲</span>
+  <span>شارك</span>
+</button>
+
+<!-- SHARE MODAL -->
+<div class="share-backdrop" id="shareBackdrop"></div>
+<div class="share-modal" id="shareModal">
+  <div class="sm-head">
+    <span>📲 شارك الموقع</span>
+    <button class="sm-close" id="shareClose">×</button>
+  </div>
+  <div class="sm-body">
+    <div class="sm-qr">
+      <img id="qrImg" src="" alt="QR Code" width="200" height="200" loading="lazy">
+    </div>
+    <div class="sm-url">
+      <span class="url-text" id="siteUrlDisplay"></span>
+      <button class="url-copy-btn" id="copyUrlBtn">نسخ 📋</button>
+    </div>
+    <div class="sm-divider">أو شارك على</div>
+    <div class="sm-socials" id="smSocials"></div>
+  </div>
+</div>
 
 <script type="module">
   // ═══════════════════════════════════════════════════
@@ -1089,6 +1211,77 @@ function updateModalVoteBtn(){
     const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
     clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
   }
+
+  // ═══════════════════════════════════════════════════
+  // SHARE MODAL
+  // ═══════════════════════════════════════════════════
+  (function initShare(){
+    const shareUrl = location.href.split('?')[0];
+    const shareText = 'صوّت على اللعبة اللي تبيها نلعبها الليلة معنا! 🎮';
+
+    document.getElementById('qrImg').src =
+      `https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=f4f1ea&bgcolor=0e0e10&qzone=2&format=png&data=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('siteUrlDisplay').textContent = shareUrl;
+
+    const openShare = () => {
+      document.getElementById('shareModal').classList.add('open');
+      document.getElementById('shareBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      buildSocials();
+    };
+    const closeShare = () => {
+      document.getElementById('shareModal').classList.remove('open');
+      document.getElementById('shareBackdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    document.getElementById('shareFloatBtn').addEventListener('click', openShare);
+    document.getElementById('shareClose').addEventListener('click', closeShare);
+    document.getElementById('shareBackdrop').addEventListener('click', closeShare);
+
+    async function doCopy(){
+      const btn = document.getElementById('copyUrlBtn');
+      try{ await navigator.clipboard.writeText(shareUrl); }
+      catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = shareUrl; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      btn.textContent = 'نُسخ ✓'; btn.classList.add('copied');
+      showToast('تم نسخ الرابط 📋');
+      setTimeout(()=>{ btn.textContent = 'نسخ 📋'; btn.classList.remove('copied'); }, 2200);
+    }
+    document.getElementById('copyUrlBtn').addEventListener('click', doCopy);
+
+    function buildSocials(){
+      const container = document.getElementById('smSocials');
+      const enc    = encodeURIComponent(shareUrl);
+      const encMsg = encodeURIComponent(shareText + '\n' + shareUrl);
+      const encTxt = encodeURIComponent(shareText);
+
+      if(navigator.share){
+        container.className = 'sm-socials solo';
+        container.innerHTML = `<button class="soc-btn native" id="nativeShareBtn">🔗 شارك عبر الجوال</button>`;
+        document.getElementById('nativeShareBtn').addEventListener('click', ()=>{
+          navigator.share({ title:'ألعاب البث — وش نلعب؟', text:shareText, url:shareUrl }).catch(()=>{});
+        });
+        return;
+      }
+
+      container.className = 'sm-socials';
+      const platforms = [
+        { cls:'wa',   href:`https://wa.me/?text=${encMsg}`,                              icon:'💬', label:'واتساب'   },
+        { cls:'tw',   href:`https://x.com/intent/tweet?text=${encMsg}`,                 icon:'𝕏',  label:'تويتر'    },
+        { cls:'tg',   href:`https://t.me/share/url?url=${enc}&text=${encTxt}`,           icon:'✈️', label:'تيليجرام' },
+        { cls:'snap', href:`https://www.snapchat.com/scan?attachmentUrl=${enc}`,         icon:'👻', label:'سناب'     },
+      ];
+      container.innerHTML = platforms.map(p =>
+        `<a class="soc-btn ${p.cls}" href="${p.href}" target="_blank" rel="noopener">
+          <span>${p.icon}</span>${p.label}
+        </a>`
+      ).join('');
+    }
+  })();
 
   // ═══════════════════════════════════════════════════
   // INIT
