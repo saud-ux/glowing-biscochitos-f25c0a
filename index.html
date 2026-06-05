@@ -6,7 +6,7 @@
 <title>وش نلعب؟ — ألعاب البث</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600&family=Rubik+Mono+One&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:#0e0e10; --bg-2:#161618; --bg-3:#1d1d20; --line:#2a2a2f;
@@ -43,7 +43,7 @@
   .hero{padding:70px 0 50px;}
   .hero .kicker{font-size:13px;color:var(--c1);letter-spacing:0.2em;margin-bottom:22px;display:flex;align-items:center;gap:12px;}
   .hero .kicker::after{content:"";flex:1;height:1px;background:var(--line);max-width:200px;}
-  .hero h1{font-family:'Reem Kufi Fun',serif;font-weight:700;font-size:clamp(56px,9vw,132px);line-height:0.92;letter-spacing:-0.02em;}
+  .hero h1{font-family:'Reem Kufi',serif;font-weight:700;font-size:clamp(56px,9vw,132px);line-height:0.92;letter-spacing:-0.02em;}
   .hero h1 .accent{color:var(--c1);font-style:italic;}
   .hero h1 .outline{-webkit-text-stroke:1.5px var(--ink);color:transparent;}
   .hero .lead{margin-top:32px;max-width:580px;font-size:18px;color:var(--ink-dim);line-height:1.7;}
@@ -55,7 +55,7 @@
   .leader.crowned::before{width:100%;}
   .leader .label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:8px;}
   .leader .label .crown{color:var(--leader-c);transition:color 0.4s;}
-  .leader .name{font-family:'Reem Kufi Fun',sans-serif;font-size:22px;font-weight:600;transition:color 0.4s;}
+  .leader .name{font-family:'Reem Kufi',sans-serif;font-size:22px;font-weight:600;transition:color 0.4s;}
   .leader.crowned .name{color:var(--leader-c);}
   .leader .count{font-family:'Rubik Mono One',monospace;font-size:28px;color:var(--leader-c,var(--c1));transition:color 0.4s;}
   .leader .count small{font-size:12px;color:var(--ink-dim);margin-right:6px;font-family:'Readex Pro',sans-serif;}
@@ -77,7 +77,7 @@
   @media(max-width:900px){.game.s1,.game.s2,.game.s3,.game.s4,.game.s5{grid-column:span 12}}
   .game .num{font-family:'Rubik Mono One',sans-serif;font-size:60px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--accent);position:absolute;bottom:14px;left:22px;opacity:0.28;}
   .game .icon{font-size:26px;margin-bottom:12px;}
-  .game h2{font-family:'Reem Kufi Fun',sans-serif;font-weight:700;font-size:30px;letter-spacing:-0.01em;margin-bottom:10px;}
+  .game h2{font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:30px;letter-spacing:-0.01em;margin-bottom:10px;}
   .game .tag{display:inline-block;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;padding:3px 10px;border:1px solid var(--accent);border-radius:999px;}
   .game .idea{color:var(--ink);font-size:14px;line-height:1.5;margin-bottom:14px;font-weight:400;}
   .game .simple{color:var(--ink-dim);font-size:14px;line-height:1.75;max-width:560px;padding:14px 0 0;border-top:1px dashed var(--line);flex:1;}
@@ -116,14 +116,14 @@
   .modal .head{padding:28px 32px 24px;border-bottom:1px solid var(--line);background:var(--bg-3);position:relative;}
   .modal .head .bar{position:absolute;top:0;right:0;left:0;height:3px;background:var(--accent);}
   .modal .head .tag{display:inline-block;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);padding:4px 10px;border:1px solid var(--accent);border-radius:999px;margin-bottom:14px;}
-  .modal .head h2{font-family:'Reem Kufi Fun',sans-serif;font-weight:700;font-size:38px;letter-spacing:-0.01em;}
+  .modal .head h2{font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:38px;letter-spacing:-0.01em;}
   .modal .close{position:absolute;top:22px;left:22px;background:transparent;border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;transition:all 0.2s;}
   .modal .close:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);}
   .modal .body{padding:28px 32px 32px;overflow-y:auto;flex:1;}
   .modal .body::-webkit-scrollbar{width:8px;}
   .modal .body::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
   .section{margin-bottom:28px;}
-  .section h3{font-family:'Reem Kufi Fun',sans-serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+  .section h3{font-family:'Reem Kufi',sans-serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
   .section h3::before{content:"";width:24px;height:1px;background:var(--accent);}
   .section p{color:var(--ink-dim);line-height:1.8;font-size:15px;}
   .section ol{list-style:none;counter-reset:step;}
@@ -142,7 +142,7 @@
 
   /* FOOTER */
   footer.site-foot{margin-top:80px;padding-top:28px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-faint);letter-spacing:0.08em;}
-  footer.site-foot .signature{font-family:'Reem Kufi Fun',sans-serif;color:var(--ink);font-size:14px;}
+  footer.site-foot .signature{font-family:'Reem Kufi',sans-serif;color:var(--ink);font-size:14px;}
   footer.site-foot .signature .at{color:var(--c5);}
   #hostLink{display:none;color:var(--c1);text-decoration:none;border:1px solid var(--c1);padding:6px 14px;border-radius:999px;font-size:11px;letter-spacing:0.08em;}
 
@@ -156,7 +156,7 @@
   .name-card::before{content:"";position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--c1),var(--c5));border-radius:12px 12px 0 0;}
   .name-card .nc-icon{font-size:52px;margin-bottom:20px;display:block;animation:ncBounce 2s ease-in-out infinite;}
   @keyframes ncBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-  .name-card h2{font-family:'Reem Kufi Fun',sans-serif;font-size:32px;font-weight:700;margin-bottom:10px;}
+  .name-card h2{font-family:'Reem Kufi',sans-serif;font-size:32px;font-weight:700;margin-bottom:10px;}
   .name-card p{color:var(--ink-dim);font-size:15px;line-height:1.6;margin-bottom:32px;}
   .name-card input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:16px 20px;border-radius:8px;font-family:'Readex Pro',sans-serif;font-size:18px;text-align:center;transition:border-color 0.2s;direction:rtl;}
   .name-card input:focus{outline:none;border-color:var(--c1);}
@@ -180,7 +180,7 @@
   .host-banner.show{transform:translateY(0);}
   .host-banner .bn-icon{font-size:38px;line-height:1;animation:bnPulse 1.4s ease-in-out infinite;flex-shrink:0;}
   @keyframes bnPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-  .host-banner .bn-text{flex:1;font-family:'Reem Kufi Fun',sans-serif;font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
+  .host-banner .bn-text{flex:1;font-family:'Reem Kufi',sans-serif;font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
   .host-banner .bn-ready{
     background:var(--bn,#fff);color:#0a0a0c;border:0;padding:16px 32px;border-radius:999px;
     font-family:'Readex Pro',sans-serif;font-size:18px;font-weight:700;cursor:pointer;
@@ -219,7 +219,7 @@
   .host-panel{position:fixed;top:0;bottom:0;left:0;width:min(460px,96vw);background:var(--bg-2);border-left:1px solid var(--line);z-index:61;transform:translateX(-105%);transition:transform 0.4s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;box-shadow:18px 0 60px -20px rgba(0,0,0,0.8);}
   .host-panel.open{transform:translateX(0);}
   .hp-head{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--bg-3);}
-  .hp-head h3{font-family:'Reem Kufi Fun',sans-serif;font-size:20px;font-weight:700;color:var(--c1);}
+  .hp-head h3{font-family:'Reem Kufi',sans-serif;font-size:20px;font-weight:700;color:var(--c1);}
   .hp-close{background:transparent;border:1px solid var(--line);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;transition:all 0.2s;}
   .hp-close:hover{background:var(--ink);color:var(--bg);}
   .hp-body{padding:20px 22px;overflow-y:auto;flex:1;}
@@ -275,13 +275,13 @@
   .winner-overlay .wo-kicker{font-size:13px;letter-spacing:0.25em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:16px;}
   .winner-overlay .wo-icon{font-size:80px;margin-bottom:8px;animation:woFloat 2.5s ease-in-out infinite;}
   @keyframes woFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  .winner-overlay .wo-title{font-family:'Reem Kufi Fun',sans-serif;font-size:clamp(40px,8vw,88px);font-weight:700;line-height:1;letter-spacing:-0.02em;text-align:center;margin-bottom:12px;}
+  .winner-overlay .wo-title{font-family:'Reem Kufi',sans-serif;font-size:clamp(40px,8vw,88px);font-weight:700;line-height:1;letter-spacing:-0.02em;text-align:center;margin-bottom:12px;}
   .winner-overlay .wo-votes{font-family:'Rubik Mono One',monospace;font-size:24px;margin-bottom:48px;}
   .winner-overlay .wo-votes small{font-family:'Readex Pro',sans-serif;font-size:14px;color:var(--ink-dim);margin-right:10px;}
   .winner-overlay .wo-ranks{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;}
   .wo-rank{background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:14px 20px;text-align:center;min-width:140px;}
   .wo-rank .rank-pos{font-family:'Rubik Mono One',monospace;font-size:28px;line-height:1;margin-bottom:6px;}
-  .wo-rank .rank-title{font-family:'Reem Kufi Fun',sans-serif;font-size:16px;font-weight:600;}
+  .wo-rank .rank-title{font-family:'Reem Kufi',sans-serif;font-size:16px;font-weight:600;}
   .wo-rank .rank-votes{font-size:11px;color:var(--ink-dim);margin-top:4px;}
   .wo-rank.r1{border-color:var(--wo-c);background:rgba(var(--wo-rgb),0.08);}
   .wo-rank.r1 .rank-pos{color:var(--wo-c);}
@@ -332,7 +332,7 @@
     justify-content:space-between;border-bottom:1px solid var(--line);
     background:var(--bg-3);
   }
-  .sm-head span{font-family:'Reem Kufi Fun',sans-serif;font-size:18px;font-weight:700;}
+  .sm-head span{font-family:'Reem Kufi',sans-serif;font-size:18px;font-weight:700;}
   .sm-close{
     background:transparent;border:1px solid var(--line);color:var(--ink);
     width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;transition:all 0.2s;
