@@ -172,6 +172,61 @@
   .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:14px 22px; border-radius:999px; font-size:14px; font-weight:500; z-index:100; opacity:0; pointer-events:none; transition:all 0.3s cubic-bezier(.2,.7,.2,1); }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
+  /* ===== VIEWER: host broadcast banner ===== */
+  .host-banner {
+    position:fixed; top:0; left:0; right:0; z-index:96;
+    display:flex; align-items:center; gap:16px;
+    padding:18px 24px;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--bn,#fff) 18%, #0e0e10), #161618);
+    border-bottom:2px solid var(--bn,#fff);
+    transform:translateY(-110%); transition:transform 0.45s cubic-bezier(.2,.7,.2,1);
+    box-shadow:0 12px 40px -10px rgba(0,0,0,0.6);
+  }
+  .host-banner.show { transform:translateY(0); }
+  .host-banner .bn-icon { font-size:30px; line-height:1; animation:bnPulse 1.4s ease-in-out infinite; }
+  @keyframes bnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+  .host-banner .bn-text { flex:1; font-family:'Reem Kufi Fun',sans-serif; font-size:21px; font-weight:600; color:var(--ink); }
+  .host-banner .bn-ready {
+    background:var(--bn,#fff); color:#0a0a0c; border:0; padding:13px 26px; border-radius:999px;
+    font-family:'Readex Pro',sans-serif; font-size:16px; font-weight:600; cursor:pointer;
+    animation:bnReadyPulse 1.6s ease-in-out infinite; white-space:nowrap;
+  }
+  @keyframes bnReadyPulse { 0%,100%{box-shadow:0 0 0 0 var(--bn)} 50%{box-shadow:0 0 0 12px transparent} }
+  .host-banner .bn-ready:active { transform:scale(0.95); }
+  .host-banner .bn-close { background:transparent; border:1px solid var(--line); color:var(--ink); width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:18px; }
+  @media (max-width:600px){ .host-banner{ padding:14px 16px; gap:10px; } .host-banner .bn-text{ font-size:16px; } }
+
+  /* ===== HOST PANEL ===== */
+  .host-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:60; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  .host-backdrop.open { opacity:1; pointer-events:auto; }
+  .host-panel {
+    position:fixed; top:0; bottom:0; left:0; width:min(420px, 92vw);
+    background:var(--bg-2); border-left:1px solid var(--line); z-index:61;
+    transform:translateX(-105%); transition:transform 0.4s cubic-bezier(.2,.7,.2,1);
+    display:flex; flex-direction:column; box-shadow:18px 0 60px -20px rgba(0,0,0,0.8);
+  }
+  .host-panel.open { transform:translateX(0); }
+  .hp-head { padding:24px 26px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; background:var(--bg-3); }
+  .hp-head h3 { font-family:'Reem Kufi Fun',sans-serif; font-size:22px; font-weight:700; color:var(--c1); }
+  .hp-close { background:transparent; border:1px solid var(--line); color:var(--ink); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:18px; transition:all 0.2s; }
+  .hp-close:hover { background:var(--ink); color:var(--bg); }
+  .hp-body { padding:24px 26px; overflow-y:auto; flex:1; }
+  .hp-section { margin-bottom:28px; }
+  .hp-label { display:block; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:12px; }
+  .hp-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .hp-btn { background:var(--bg-3); border:1px solid var(--line); color:var(--ink); padding:16px 12px; border-radius:8px; cursor:pointer; font-family:'Readex Pro',sans-serif; font-size:14px; transition:all 0.2s; text-align:center; }
+  .hp-btn:hover { border-color:var(--c1); background:rgba(255,138,31,0.08); transform:translateY(-2px); }
+  .hp-btn:active { transform:translateY(0) scale(0.97); }
+  .hp-custom { display:flex; gap:8px; }
+  .hp-custom input { flex:1; background:var(--bg); border:1px solid var(--line); color:var(--ink); padding:12px 14px; border-radius:8px; font-family:'Readex Pro',sans-serif; font-size:14px; }
+  .hp-custom input:focus { outline:none; border-color:var(--c1); }
+  .hp-custom button { background:var(--c1); color:#0a0a0c; border:0; padding:0 20px; border-radius:8px; cursor:pointer; font-weight:600; font-family:'Readex Pro',sans-serif; }
+  .hp-ready-box { display:flex; align-items:center; gap:14px; background:var(--bg-3); border:1px solid var(--line); border-radius:8px; padding:16px 18px; }
+  .hp-ready-num { font-family:'Rubik Mono One',monospace; font-size:40px; color:var(--c2); line-height:1; }
+  .hp-ready-txt { font-size:12px; color:var(--ink-dim); line-height:1.5; }
+  .hp-reset { width:100%; background:transparent; border:1px solid var(--c3); color:var(--c3); padding:14px; border-radius:8px; cursor:pointer; font-family:'Readex Pro',sans-serif; font-size:14px; font-weight:500; transition:all 0.2s; }
+  .hp-reset:hover { background:var(--c3); color:#0a0a0c; }
+
   .setup-banner { background:rgba(255,138,31,0.08); border:1px solid var(--c1); border-radius:6px; padding:14px 18px; margin-top:20px; font-size:13px; color:var(--c1); line-height:1.6; }
   .setup-banner code { background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:3px; font-family:monospace; }
 
@@ -196,8 +251,8 @@
 
   <section class="hero">
     <div class="kicker">صوّت • شارك • العب</div>
-    <h1>وش <span class="accent">نلعب</span><br>اليوم<span class="outline">؟</span></h1>
-    <p class="lead">خمس ألعاب جاهزة، كلها تتلعب جماعياً وما تحتاج إلا جوالك. اقرأ شرح كل لعبة، اختار اللي يعجبك، وصوّت </p>
+    <h1>وش <span class="accent">نلعب</span><br>الليلة<span class="outline">؟</span></h1>
+    <p class="lead">خمس ألعاب جاهزة، كلها تتلعب جماعياً وما تحتاج إلا جوالك. اقرأ شرح كل لعبة، اختار اللي يعجبك، وصوّت — والتصويت يتحدث لحظياً عند الجميع.</p>
     <div class="setup-banner" id="setupBanner" style="display:none;">
       ⚙️ التصويت يشتغل محلياً فقط (هذا الجهاز). عشان يتزامن بين كل الأجهزة، عبّي إعدادات Firebase في أعلى السكربت — راجع التعليمات.
     </div>
@@ -215,10 +270,59 @@
   <section class="games" id="gamesGrid"></section>
 
   <footer class="site-foot">
+    <div class="signature">صنعها <span class="at">@</span>saud.alhamad</div>
+    <div style="display:flex; gap:18px; align-items:center;">
+      <a href="#host" id="hostLink" style="color:var(--c1); text-decoration:none; border:1px solid var(--c1); padding:6px 14px; border-radius:999px; font-size:11px; letter-spacing:0.08em;">🎛️ لوحة الهوست</a>
+      <span>RIYADH • ٢٠٢٦</span>
+    </div>
   </footer>
 </div>
 
 <div class="flash-overlay" id="flash"></div>
+
+<!-- viewer host-broadcast banner -->
+<div class="host-banner" id="hostBanner"></div>
+
+<!-- host control panel -->
+<div class="host-backdrop" id="hostBackdrop"></div>
+<aside class="host-panel" id="hostPanel">
+  <div class="hp-head">
+    <h3>🎛️ لوحة الهوست</h3>
+    <button class="hp-close" id="hostClose">×</button>
+  </div>
+  <div class="hp-body">
+    <div class="hp-section">
+      <span class="hp-label">رسائل سريعة للحضور</span>
+      <div class="hp-grid">
+        <button class="hp-btn" data-send="ready" data-text="جاهزين نصوّت؟ 🎮">🎮 جاهزين نصوّت؟</button>
+        <button class="hp-btn" data-send="start" data-text="التصويت بدأ! اختاروا لعبتكم 🔥">🔥 ابدأ التصويت</button>
+        <button class="hp-btn" data-send="warn" data-text="آخر ٣٠ ثانية للتصويت! ⏰">⏰ آخر ٣٠ ثانية</button>
+        <button class="hp-btn" data-send="end" data-text="التصويت انتهى ✋">✋ أقفل التصويت</button>
+      </div>
+    </div>
+
+    <div class="hp-section">
+      <span class="hp-label">رسالة مخصصة</span>
+      <div class="hp-custom">
+        <input type="text" id="hostCustomInput" placeholder="اكتب رسالتك للحضور...">
+        <button id="hostCustomSend">إرسال</button>
+      </div>
+    </div>
+
+    <div class="hp-section hp-ready">
+      <span class="hp-label">عدّاد الجاهزين</span>
+      <div class="hp-ready-box">
+        <span class="hp-ready-num" id="readyCount">٠</span>
+        <span class="hp-ready-txt">شخص ضغط "جاهز" بعد آخر سؤال جاهزية</span>
+      </div>
+    </div>
+
+    <div class="hp-section">
+      <button class="hp-reset" id="hostResetBtn">🔄 تصفير الأصوات وبدء جولة جديدة</button>
+    </div>
+  </div>
+</aside>
+
 <div class="modal-backdrop" id="backdrop"></div>
 <div class="modal" id="modal">
   <div class="head"><div class="bar"></div><button class="close" id="closeBtn">×</button><div class="tag" id="mTag"></div><h2 id="mTitle"></h2></div>
@@ -303,8 +407,14 @@
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return (window._mem||{})[k] || null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ (window._mem=window._mem||{})[k]=v; } }
 
-  function getMyVote(){ return lsGet('gn_my_vote'); }
-  function setMyVote(v){ lsSet('gn_my_vote', v); }
+  function getMyVote(){ return lsGet('gn_my_vote') || null; }
+  function setMyVote(v){ lsSet('gn_my_vote', v || ''); }
+  function getVoterId(){ let id = lsGet('gn_voter'); if(!id){ id = 'v'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-3); lsSet('gn_voter', id); } return id; }
+  const voterId = getVoterId();
+  let currentRound = null;
+
+  // host PIN — غيّره لرقمك السري
+  const HOST_PIN = "1234";
 
   let db = null, dbRefs = null;
 
@@ -315,12 +425,12 @@
     if (configured) {
       try {
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js");
-        const { getDatabase, ref, onValue, runTransaction } =
+        const { getDatabase, ref, onValue, runTransaction, set } =
           await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js");
 
         const app = initializeApp(firebaseConfig);
         db = getDatabase(app);
-        dbRefs = { ref, onValue, runTransaction };
+        dbRefs = { ref, onValue, runTransaction, set };
         mode = 'firebase';
 
         // connection status
@@ -338,6 +448,27 @@
           let changed = null;
           for (const g of games) if ((votes[g.id]||0) > (old[g.id]||0)) changed = g.id;
           updateVoteUI(true, changed);
+        });
+
+        // host → viewers broadcast messages
+        onValue(ref(db, 'broadcast'), (snap) => { const b = snap.val(); if (b) handleBroadcast(b); });
+
+        // ready-check responses (host watches the count)
+        onValue(ref(db, 'ready'), (snap) => {
+          const r = snap.val() || {};
+          updateReadyCount(Object.keys(r).length);
+        });
+
+        // round counter — when host resets, everyone can vote again
+        onValue(ref(db, 'round'), (snap) => {
+          const r = snap.val() || 0;
+          if (currentRound === null) { currentRound = r; }
+          else if (r !== currentRound) {
+            currentRound = r;
+            setMyVote(''); userVotedFor = null;
+            renderGames(); updateModalVoteBtn();
+            showToast('🔄 جولة جديدة! صوّت من جديد');
+          }
         });
         return;
       } catch (e) {
@@ -580,6 +711,106 @@
     const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
     clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
   }
+
+  // ============ VIEWER: host broadcast banner ============
+  let lastBroadcastId = 0;
+  function handleBroadcast(b){
+    if(!b || !b.id || b.id === lastBroadcastId) return;
+    lastBroadcastId = b.id;
+    showHostBanner(b.text || '', b.kind || 'msg');
+  }
+  function showHostBanner(text, kind){
+    const banner = document.getElementById('hostBanner');
+    const colors = { ready:'#ff8a1f', start:'#4ec27c', warn:'#ff4757', end:'#5b8dff', msg:'#f4f1ea' };
+    banner.style.setProperty('--bn', colors[kind] || colors.msg);
+    let inner = `<div class="bn-icon">${kind==='ready'?'🎮':kind==='start'?'🔥':kind==='warn'?'⏰':kind==='end'?'✋':'📢'}</div>
+      <div class="bn-text">${text}</div>`;
+    if(kind === 'ready'){
+      inner += `<button class="bn-ready" id="readyBtn">جاهز ✅</button>`;
+    } else {
+      inner += `<button class="bn-close" id="bnClose">×</button>`;
+    }
+    banner.innerHTML = inner;
+    banner.classList.add('show');
+    // hype
+    vibrate([40,60,40]); playChord([659.25,880],'sine',0.16,0.08,0.4);
+    screenFlash(colors[kind] || '#f4f1ea');
+
+    const rb = document.getElementById('readyBtn');
+    if(rb) rb.addEventListener('click', markReady);
+    const bc = document.getElementById('bnClose');
+    if(bc) bc.addEventListener('click', ()=>banner.classList.remove('show'));
+
+    // auto-dismiss non-ready banners
+    clearTimeout(window._bnTimer);
+    if(kind !== 'ready'){ window._bnTimer = setTimeout(()=>banner.classList.remove('show'), 6000); }
+  }
+  async function markReady(){
+    const banner = document.getElementById('hostBanner');
+    banner.innerHTML = `<div class="bn-icon">✅</div><div class="bn-text">سجّلنا إنك جاهز!</div>`;
+    vibrate(60); playChord([523.25,659.25,783.99],'sine',0.15,0.07,0.4);
+    fireConfetti(innerWidth/2, 120, '#4ec27c', 20);
+    try { if(mode==='firebase'){ const {ref,set}=dbRefs; await set(ref(db,'ready/'+voterId), true); } } catch(e){ console.error(e); }
+    setTimeout(()=>banner.classList.remove('show'), 2000);
+  }
+
+  // ============ HOST PANEL ============
+  function openHostGate(){
+    const pin = prompt('🔒 رمز الهوست:');
+    if(pin === null) return;
+    if(pin !== HOST_PIN){ showToast('رمز غير صحيح ❌'); return; }
+    document.getElementById('hostPanel').classList.add('open');
+    document.getElementById('hostBackdrop').classList.add('open');
+  }
+  function closeHost(){
+    document.getElementById('hostPanel').classList.remove('open');
+    document.getElementById('hostBackdrop').classList.remove('open');
+  }
+  async function hostSend(text, kind){
+    if(mode !== 'firebase'){ showToast('ميزات الهوست تحتاج Firebase متصل'); return; }
+    try {
+      const {ref,set}=dbRefs;
+      const id = Date.now();
+      if(kind === 'ready'){ await set(ref(db,'ready'), null); updateReadyCount(0); }
+      await set(ref(db,'broadcast'), { id, text, kind: kind || 'msg', ts: id });
+      showToast('📢 أُرسلت للجميع');
+    } catch(e){ console.error(e); showToast('فشل الإرسال'); }
+  }
+  async function hostReset(){
+    if(mode !== 'firebase'){
+      votes={g1:0,g2:0,g3:0,g4:0,g5:0}; lsSet('gn_votes',JSON.stringify(votes));
+      setMyVote(''); userVotedFor=null; renderGames(); updateVoteUI(false); showToast('🔄 صُفّرت الأصوات');
+      return;
+    }
+    if(!confirm('تصفير كل الأصوات وبدء جولة جديدة؟')) return;
+    try {
+      const {ref,set}=dbRefs;
+      await set(ref(db,'votes'), {g1:0,g2:0,g3:0,g4:0,g5:0});
+      await set(ref(db,'ready'), null);
+      await set(ref(db,'round'), (currentRound||0)+1);
+      showToast('🔄 جولة جديدة بدأت');
+    } catch(e){ console.error(e); showToast('فشل التصفير'); }
+  }
+  function updateReadyCount(n){
+    const el = document.getElementById('readyCount');
+    if(el) el.textContent = ar(n);
+  }
+
+  // wire host controls
+  document.getElementById('hostLink').addEventListener('click', e=>{ e.preventDefault(); openHostGate(); });
+  document.getElementById('hostClose').addEventListener('click', closeHost);
+  document.getElementById('hostBackdrop').addEventListener('click', closeHost);
+  document.querySelectorAll('#hostPanel [data-send]').forEach(b=>{
+    b.addEventListener('click', ()=>hostSend(b.dataset.text, b.dataset.send));
+  });
+  document.getElementById('hostCustomSend').addEventListener('click', ()=>{
+    const inp = document.getElementById('hostCustomInput');
+    const v = inp.value.trim(); if(!v) return;
+    hostSend(v, 'msg'); inp.value='';
+  });
+  document.getElementById('hostResetBtn').addEventListener('click', hostReset);
+  // open host panel directly via ?host in URL
+  if(/[?&#]host/.test(location.href)) setTimeout(openHostGate, 400);
 
   // ============ INIT ============
   renderGames();
