@@ -494,7 +494,7 @@
   let db = null, dbRefs = null;
   let voterName = '';
   let votingClosed = false;
-
+let lastVoteTs=0;
   // ═══════════════════════════════════════════════════
   // LOCAL STORAGE HELPERS
   // ═══════════════════════════════════════════════════
@@ -694,42 +694,48 @@
   // ═══════════════════════════════════════════════════
   // RENDER GAMES
   // ═══════════════════════════════════════════════════
-  function renderGames(){
-    const grid=document.getElementById('gamesGrid');
-    grid.innerHTML=games.map(g=>{
-      const isVoted=userVotedFor===g.id;
-      const hasVoted=userVotedFor!==null;
-      const closed=votingClosed;
-      let btnCls='btn ', btnTxt='';
-      if(closed){ btnCls+='locked'; btnTxt='التصويت أُقفل'; }
-      else if(isVoted){ btnCls+='voted'; btnTxt='صوّتك مسجّل'; }
-      else if(hasVoted){ btnCls+='locked'; btnTxt='صوّتك مسجّل'; }
-      else{ btnCls+='primary'; btnTxt='صوّت 🔥'; }
-      return `
-      <article class="game ${g.size}" data-id="${g.id}">
-        <div class="icon">${g.icon}</div>
-        <span class="tag">${g.tag}</span>
-        <h2>${g.title}</h2>
-        <p class="idea">${g.idea}</p>
-        <p class="simple"><span class="label">شرح مبسّط</span>${g.simple}</p>
-        <div class="actions">
-          <button class="btn open-btn" data-id="${g.id}">شوف التفاصيل ←</button>
-          <button class="${btnCls} vote-btn" data-id="${g.id}" ${(closed||hasVoted)?'disabled':''}>
-            ${isVoted?'✓ '+btnTxt:btnTxt}
-          </button>
-        </div>
-        <div class="vote-bar"><div class="fill" id="fill-${g.id}"></div></div>
-        <div class="vote-meta">
-          <span><span class="count count-${g.id}" id="cnt-${g.id}">٠</span> صوت</span>
-          <span class="pct" id="pct-${g.id}">٠٪</span>
-        </div>
-        <div class="num">${g.num}</div>
-      </article>`;
-    }).join('');
-    grid.querySelectorAll('.open-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openModal(b.dataset.id);}));
-    grid.querySelectorAll('.vote-btn:not([disabled])').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();castVote(b.dataset.id,b);}));
-  }
-
+function renderGames(){
+  const grid=document.getElementById('gamesGrid');
+  grid.innerHTML=games.map(g=>{
+    const isVoted=userVotedFor===g.id;
+    const hasVoted=userVotedFor!==null;
+    const closed=votingClosed;
+    let btnCls='btn ', btnTxt='', disabled=false;
+    if(closed){
+      btnCls+='locked'; disabled=true;
+      btnTxt=isVoted?'✓ تصويتك':'التصويت أُقفل';
+    } else if(isVoted){
+      btnCls+='voted'; disabled=true;
+      btnTxt='تصويتك الحالي';
+    } else if(hasVoted){
+      btnCls+='primary'; btnTxt='غيّر لهذي 🔄';
+    } else {
+      btnCls+='primary'; btnTxt='صوّت 🔥';
+    }
+    return `
+    <article class="game ${g.size}" data-id="${g.id}">
+      <div class="icon">${g.icon}</div>
+      <span class="tag">${g.tag}</span>
+      <h2>${g.title}</h2>
+      <p class="idea">${g.idea}</p>
+      <p class="simple"><span class="label">شرح مبسّط</span>${g.simple}</p>
+      <div class="actions">
+        <button class="btn open-btn" data-id="${g.id}">شوف التفاصيل ←</button>
+        <button class="${btnCls} vote-btn" data-id="${g.id}" ${disabled?'disabled':''}>
+          ${isVoted?'✓ '+btnTxt:btnTxt}
+        </button>
+      </div>
+      <div class="vote-bar"><div class="fill" id="fill-${g.id}"></div></div>
+      <div class="vote-meta">
+        <span><span class="count count-${g.id}" id="cnt-${g.id}">٠</span> صوت</span>
+        <span class="pct" id="pct-${g.id}">٠٪</span>
+      </div>
+      <div class="num">${g.num}</div>
+    </article>`;
+  }).join('');
+  grid.querySelectorAll('.open-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openModal(b.dataset.id);}));
+  grid.querySelectorAll('.vote-btn:not([disabled])').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();castVote(b.dataset.id,b);}));
+}
   function updateVoteUI(animated=false,changedId=null){
     const total=Object.values(votes).reduce((a,b)=>a+(b||0),0);
     const totalEl=document.getElementById('totalVotes');
@@ -783,41 +789,46 @@
   // ═══════════════════════════════════════════════════
   // CAST VOTE — ONE VOTE ONLY
   // ═══════════════════════════════════════════════════
-  async function castVote(gameId,originBtn){
-    if(votingClosed){ showToast('التصويت أُقفل ✋'); return; }
-    if(userVotedFor!==null){ showToast(`صوّتك مسجّل لـ "${games.find(g=>g.id===userVotedFor)?.title}" 🔒`); vibrate(50); return; }
+ async function castVote(gameId,originBtn){
+ if(Date.now()-lastVoteTs<3000){ showToast('انتظر ٣ ثواني ⏱️'); return; }
+lastVoteTs=Date.now();
+  if(votingClosed){ showToast('التصويت أُقفل ✋'); return; }
+  if(userVotedFor===gameId){ showToast('هذا تصويتك الحالي'); return; }
 
-    userVotedFor=gameId; setMyVote(gameId);
-    const color=colorMap[gameId];
+  const previousVote=userVotedFor;
+  const isSwitching=previousVote!==null;
 
-    // hype
-    vibrate([30,40,80]); playVoteSound(); screenFlash(color);
-    if(originBtn){
-      const r=originBtn.getBoundingClientRect();
-      fireConfetti(r.left+r.width/2,r.top+r.height/2,color,28);
-      floatPlusOne(r.left+r.width/2,r.top+r.height/2-10,color);
-    }
+  userVotedFor=gameId; setMyVote(gameId);
+  const color=colorMap[gameId];
 
-    // update buttons immediately
-    renderGames(); updateModalVoteBtn();
-
-    // push to Firebase
-    try{
-      if(mode==='firebase'&&dbRefs){
-        const {ref,runTransaction,set}=dbRefs;
-        await runTransaction(ref(db,'votes/'+gameId),cur=>(cur||0)+1);
-        await set(ref(db,'voters/'+voterId),{name:voterName,game:gameId,round:currentRound||0,ts:Date.now()});
-      } else {
-        votes[gameId]=(votes[gameId]||0)+1;
-        lsSet('gn_votes',JSON.stringify(votes));
-        updateVoteUI(true,gameId);
-      }
-    } catch(e){ console.error(e); showToast('صار خطأ، حاول مرة ثانية'); }
-
-    const g=games.find(x=>x.id===gameId);
-    showToast(`🔥 صوّتك انسجل لـ "${g.title}"`);
+  vibrate([30,40,80]); playVoteSound(); screenFlash(color);
+  if(originBtn){
+    const r=originBtn.getBoundingClientRect();
+    fireConfetti(r.left+r.width/2,r.top+r.height/2,color,28);
+    floatPlusOne(r.left+r.width/2,r.top+r.height/2-10,color);
   }
 
+  renderGames(); updateModalVoteBtn();
+
+  try{
+    if(mode==='firebase'&&dbRefs){
+      const {ref,runTransaction,set}=dbRefs;
+      if(isSwitching){
+        await runTransaction(ref(db,'votes/'+previousVote),cur=>Math.max(0,(cur||0)-1));
+      }
+      await runTransaction(ref(db,'votes/'+gameId),cur=>(cur||0)+1);
+      await set(ref(db,'voters/'+voterId),{name:voterName,game:gameId,round:currentRound||0,ts:Date.now()});
+    } else {
+      if(isSwitching) votes[previousVote]=Math.max(0,(votes[previousVote]||0)-1);
+      votes[gameId]=(votes[gameId]||0)+1;
+      lsSet('gn_votes',JSON.stringify(votes));
+      updateVoteUI(true,gameId);
+    }
+  } catch(e){ console.error(e); showToast('صار خطأ، حاول مرة ثانية'); }
+
+  const g=games.find(x=>x.id===gameId);
+  showToast(isSwitching?`🔄 غيّرت تصويتك إلى "${g.title}"`:`🔥 صوّتك انسجل لـ "${g.title}"`);
+}
   // ═══════════════════════════════════════════════════
   // WINNER OVERLAY
   // ═══════════════════════════════════════════════════
@@ -1046,13 +1057,23 @@
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow='hidden';
   }
-  function updateModalVoteBtn(){
-    const btn=document.getElementById('mVoteBtn');
-    if(votingClosed){ btn.className='btn locked'; btn.textContent='التصويت أُقفل ✋'; btn.disabled=true; return; }
-    if(userVotedFor===currentModalGame){ btn.className='btn voted'; btn.textContent='✓ صوّتك مسجّل'; btn.disabled=true; return; }
-    if(userVotedFor!==null){ btn.className='btn locked'; btn.textContent='صوّتك مسجّل لعبة ثانية 🔒'; btn.disabled=true; return; }
-    btn.className='btn primary'; btn.textContent='صوّت لهالّلعبة 🔥'; btn.disabled=false;
+function updateModalVoteBtn(){
+  const btn=document.getElementById('mVoteBtn');
+  if(votingClosed){
+    btn.className='btn locked';
+    btn.textContent=userVotedFor===currentModalGame?'✓ تصويتك (مُقفل)':'التصويت أُقفل ✋';
+    btn.disabled=true; return;
   }
+  if(userVotedFor===currentModalGame){
+    btn.className='btn voted'; btn.textContent='✓ تصويتك الحالي';
+    btn.disabled=true; return;
+  }
+  if(userVotedFor!==null){
+    btn.className='btn primary'; btn.textContent='غيّر تصويتك لهذي 🔄';
+    btn.disabled=false; return;
+  }
+  btn.className='btn primary'; btn.textContent='صوّت لهالّلعبة 🔥'; btn.disabled=false;
+}
   function closeModal(){
     document.getElementById('backdrop').classList.remove('open');
     document.getElementById('modal').classList.remove('open');
