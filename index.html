@@ -26,7 +26,7 @@
   /* TOPBAR */
   .topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:0.04em;color:var(--ink-dim);text-transform:uppercase;flex-wrap:wrap;gap:10px;}
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand .dot{width:8px;height:8px;background:var(--c1);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;}
+  .brand .dot{font-size:16px;animation:dotPulse 2s ease-in-out infinite;line-height:1;}
   @keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,138,31,0.6)}50%{box-shadow:0 0 0 10px rgba(255,138,31,0)}}
   .topbar .meta{display:flex;gap:20px;align-items:center;}
   .topbar .meta span::before{content:"";display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--ink-faint);margin-left:14px;vertical-align:middle;}
@@ -418,7 +418,7 @@
 
 <div class="wrap">
   <div class="topbar">
-    <div class="brand"><span class="dot"></span><span>ألعاب البث • LIVE GAMES</span></div>
+    <div class="brand"><span class="dot">⚡</span><span>ألعاب البث • LIVE GAMES</span></div>
     <div class="meta">
       <span class="conn" id="conn"><span class="led"></span><span id="connText">يربط...</span></span>
       <span class="live-count" id="totalVotes">٠ صوت</span>
@@ -429,7 +429,7 @@
   <section class="hero">
     <div class="kicker">صوّت • شارك • العب</div>
     <h1>وش <span class="accent">نلعب</span><br>الليلة<span class="outline">؟</span></h1>
-    <p class="lead">خمس ألعاب جاهزة، كلها تتلعب جماعياً وما تحتاج إلا جوالك. اقرأ شرح كل لعبة، اختار اللي يعجبك، وصوّت.</p>
+
     <div class="setup-banner" id="setupBanner" style="display:none;">
       ⚙️ التصويت يشتغل محلياً فقط (هذا الجهاز). عشان يتزامن بين كل الأجهزة، عبّي إعدادات Firebase في أعلى السكربت.
     </div>
@@ -450,7 +450,7 @@
     <div class="signature"></div>
     <div style="display:flex;gap:18px;align-items:center;">
       <a href="#host" id="hostLink">🎛️ لوحة الهوست</a>
-      <span>RIYADH • ٢٠٢٦</span>
+
     </div>
   </footer>
 </div>
