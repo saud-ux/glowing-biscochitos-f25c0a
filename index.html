@@ -4,16 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>وش نلعب؟ — ألعاب البث</title>
-<meta name="description" content="خمس ألعاب جماعية للبث المباشر — اقرأ شرح كل لعبة وصوّت للي يعجبك. كله من جوالك وبدون أي تطبيق.">
-<meta name="theme-color" content="#0e0e10">
-<meta property="og:type" content="website">
-<meta property="og:title" content="وش نلعب اليوم؟ — ألعاب البث">
-<meta property="og:description" content="خمس ألعاب جماعية للبث المباشر. اقرأ، اختار، وصوّت من جوالك مباشرة.">
-<meta property="og:locale" content="ar_AR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="وش نلعب اليوم؟ — ألعاب البث">
-<meta name="twitter:description" content="خمس ألعاب جماعية للبث المباشر. اقرأ، اختار، وصوّت من جوالك مباشرة.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600&family=Rubik+Mono+One&display=swap" rel="stylesheet">
@@ -190,42 +180,6 @@
   .game.s1{animation-delay:0.05s} .game.s2{animation-delay:0.12s} .game.s3{animation-delay:0.19s} .game.s4{animation-delay:0.26s} .game.s5{animation-delay:0.33s}
   .hero h1 { animation:rise 0.9s cubic-bezier(.2,.7,.2,1) backwards; }
   .hero .lead { animation:rise 1s 0.2s cubic-bezier(.2,.7,.2,1) backwards; }
-
-  /* ---- icon buttons in topbar ---- */
-  .icon-btn { background:transparent; border:1px solid var(--line); color:var(--ink); width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:14px; line-height:1; display:inline-grid; place-items:center; padding:0; transition:all 0.2s; }
-  .icon-btn:hover { border-color:var(--ink); background:var(--bg-3); }
-  .icon-btn[aria-pressed="true"] { opacity:0.55; }
-
-  /* ---- locked voting state ---- */
-  .lock-note { display:none; margin:50px 0 0; background:rgba(255,71,87,0.08); border:1px solid var(--c3); border-radius:6px; padding:14px 18px; font-size:14px; color:var(--c3); line-height:1.6; align-items:center; gap:10px; }
-  body.voting-locked .lock-note { display:flex; }
-  body.voting-locked .vote-btn, body.voting-locked #mVoteBtn { opacity:0.45; pointer-events:none; }
-
-  /* ---- share modal / host panel reuse the modal backdrop ---- */
-  .panel { position:fixed; top:50%; left:50%; transform:translate(-50%,-48%); width:min(440px,calc(100vw - 32px)); background:var(--bg-2); border:1px solid var(--line); border-radius:8px; z-index:60; opacity:0; pointer-events:none; transition:opacity 0.3s, transform 0.3s; padding:30px 28px; }
-  .panel.open { opacity:1; pointer-events:auto; transform:translate(-50%,-50%); }
-  .panel h3 { font-family:'Reem Kufi Fun',sans-serif; font-size:24px; font-weight:700; margin-bottom:6px; }
-  .panel .sub { color:var(--ink-dim); font-size:13px; line-height:1.6; margin-bottom:20px; }
-  .panel .close { position:absolute; top:16px; left:16px; background:transparent; border:1px solid var(--line); color:var(--ink); width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px; transition:all 0.2s; }
-  .panel .close:hover { background:var(--ink); color:var(--bg); }
-  .share-url { display:flex; gap:8px; margin-bottom:18px; }
-  .share-url input { flex:1; background:var(--bg); border:1px solid var(--line); border-radius:6px; color:var(--ink); padding:11px 14px; font-family:'Readex Pro',sans-serif; font-size:13px; direction:ltr; text-align:left; }
-  .share-row { display:flex; gap:10px; }
-  .share-row .btn { flex:1; text-align:center; }
-  .qr-box { background:#fff; border-radius:8px; padding:14px; width:200px; margin:0 auto 18px; display:grid; place-items:center; }
-  .qr-box img { width:172px; height:172px; display:block; }
-  .panel .field { margin-bottom:16px; }
-  .panel .field label { display:block; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:8px; }
-  .panel .field input { width:100%; background:var(--bg); border:1px solid var(--line); border-radius:6px; color:var(--ink); padding:11px 14px; font-family:'Readex Pro',sans-serif; font-size:14px; }
-  .panel .host-actions { display:flex; flex-direction:column; gap:10px; }
-  .btn.danger { border-color:var(--c3); color:var(--c3); }
-  .btn.danger:hover { background:var(--c3); color:#0a0a0c; border-color:var(--c3); }
-  .btn.block { width:100%; text-align:center; }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
-    body::after { display:none; }
-  }
 </style>
 </head>
 <body>
@@ -235,10 +189,8 @@
     <div class="brand"><span class="dot"></span><span>ألعاب البث • LIVE GAMES</span></div>
     <div class="meta">
       <span class="conn" id="conn"><span class="led"></span><span id="connText">يربط...</span></span>
-      <span class="live-count" id="totalVotes" aria-live="polite">٠ صوت</span>
+      <span class="live-count" id="totalVotes">٠ صوت</span>
       <span>٥ ألعاب</span>
-      <button class="icon-btn" id="shareBtn" title="مشاركة الصفحة" aria-label="مشاركة الصفحة">🔗</button>
-      <button class="icon-btn" id="muteBtn" title="كتم/تشغيل الصوت" aria-label="كتم الصوت" aria-pressed="false">🔊</button>
     </div>
   </div>
 
@@ -260,8 +212,6 @@
     <div class="count" id="leaderCount"><small>أصوات</small>٠</div>
   </div>
 
-  <div class="lock-note" id="lockNote" role="status">🔒 التصويت مقفل حالياً — انتظر الهوست يفتح الجولة الجاية.</div>
-
   <section class="games" id="gamesGrid"></section>
 
   <footer class="site-foot">
@@ -270,46 +220,14 @@
 
 <div class="flash-overlay" id="flash"></div>
 <div class="modal-backdrop" id="backdrop"></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-  <div class="head"><div class="bar"></div><button class="close" id="closeBtn" aria-label="إغلاق">×</button><div class="tag" id="mTag"></div><h2 id="mTitle"></h2></div>
+<div class="modal" id="modal">
+  <div class="head"><div class="bar"></div><button class="close" id="closeBtn">×</button><div class="tag" id="mTag"></div><h2 id="mTitle"></h2></div>
   <div class="body" id="mBody"></div>
   <div class="foot">
-    <div class="count-display"><span>عدد الأصوات الحالية:</span><strong id="mCount" aria-live="polite">٠</strong></div>
+    <div class="count-display"><span>عدد الأصوات الحالية:</span><strong id="mCount">٠</strong></div>
     <button class="btn primary" id="mVoteBtn">صوّت لهالّلعبة</button>
   </div>
 </div>
-
-<!-- Share panel -->
-<div class="panel" id="sharePanel" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
-  <button class="close" id="shareClose" aria-label="إغلاق">×</button>
-  <h3 id="shareTitle">شارك الصفحة</h3>
-  <p class="sub">خل المشاهدين يمسحون الكود أو ينسخون الرابط ويدخلون يصوّتون.</p>
-  <div class="qr-box"><img id="qrImg" alt="QR code للصفحة"></div>
-  <div class="share-url">
-    <input type="text" id="shareUrl" readonly aria-label="رابط الصفحة">
-    <button class="btn" id="copyUrlBtn">نسخ</button>
-  </div>
-  <div class="share-row">
-    <button class="btn primary block" id="webShareBtn">مشاركة 📲</button>
-  </div>
-</div>
-
-<!-- Host control panel -->
-<div class="panel" id="hostPanel" role="dialog" aria-modal="true" aria-labelledby="hostTitle">
-  <button class="close" id="hostClose" aria-label="إغلاق">×</button>
-  <h3 id="hostTitle">لوحة الهوست</h3>
-  <p class="sub">تحكّم بالتصويت لكل الأجهزة. (هذي حماية بسيطة وليست أمان فعلي.)</p>
-  <div class="field" id="hostLoginField">
-    <label for="hostPass">كلمة مرور الهوست</label>
-    <input type="password" id="hostPass" autocomplete="off" placeholder="••••••">
-    <button class="btn block" id="hostLoginBtn" style="margin-top:10px;">دخول</button>
-  </div>
-  <div class="host-actions" id="hostControls" style="display:none;">
-    <button class="btn block" id="lockBtn">🔒 قفل التصويت</button>
-    <button class="btn danger block" id="resetBtn">↺ تصفير كل الأصوات (جولة جديدة)</button>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -379,21 +297,14 @@
   let currentModalGame = null;
   let previousLeader = null;
   let mode = 'local'; // 'firebase' | 'local'
-  let votingLocked = false;
-  let hostUnlocked = false;
-  let muted = false;
-  const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const HOST_PASS = 'saud'; // soft gate only — not real security
 
   // ============ STORAGE LAYER ============
   // local helpers (per device) for voter identity + their current choice
-  function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return (window._mem||{})[k] ?? null; } }
+  function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return (window._mem||{})[k] || null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ (window._mem=window._mem||{})[k]=v; } }
-  function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){ if(window._mem) delete window._mem[k]; } }
 
   function getMyVote(){ return lsGet('gn_my_vote'); }
   function setMyVote(v){ lsSet('gn_my_vote', v); }
-  function clearMyVote(){ lsDel('gn_my_vote'); userVotedFor = null; }
 
   let db = null, dbRefs = null;
 
@@ -404,12 +315,12 @@
     if (configured) {
       try {
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js");
-        const { getDatabase, ref, onValue, runTransaction, set } =
+        const { getDatabase, ref, onValue, runTransaction } =
           await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js");
 
         const app = initializeApp(firebaseConfig);
         db = getDatabase(app);
-        dbRefs = { ref, onValue, runTransaction, set };
+        dbRefs = { ref, onValue, runTransaction };
         mode = 'firebase';
 
         // connection status
@@ -428,10 +339,6 @@
           for (const g of games) if ((votes[g.id]||0) > (old[g.id]||0)) changed = g.id;
           updateVoteUI(true, changed);
         });
-
-        // live lock state + round id — synced across all devices
-        onValue(ref(db, 'meta/locked'), (snap) => applyLock(snap.val() === true));
-        onValue(ref(db, 'meta/round'),  (snap) => applyRound(snap.val() ?? 0));
         return;
       } catch (e) {
         console.error('Firebase init failed, falling back to local:', e);
@@ -446,8 +353,6 @@
       const saved = lsGet('gn_votes');
       if (saved) votes = { g1:0,g2:0,g3:0,g4:0,g5:0, ...JSON.parse(saved) };
     } catch(e){}
-    applyLock(lsGet('gn_locked') === '1');
-    applyRound(parseInt(lsGet('gn_round') || '0', 10));
     updateVoteUI(false);
   }
 
@@ -481,7 +386,6 @@
   let audioCtx = null;
   function getAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
   function playChord(notes, type, gainMax, step, dur){
-    if(muted) return;
     const ctx = getAudio(); if(!ctx) return;
     notes.forEach((freq,i)=>{
       const osc = ctx.createOscillator(), gain = ctx.createGain();
@@ -500,9 +404,8 @@
 
   // ============ EFFECTS ============
   function vibrate(p){ if(navigator.vibrate) navigator.vibrate(p); }
-  function screenFlash(color){ if(prefersReduced) return; const f=document.getElementById('flash'); f.style.setProperty('--flash-color',color); f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }
+  function screenFlash(color){ const f=document.getElementById('flash'); f.style.setProperty('--flash-color',color); f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }
   function fireConfetti(x,y,color,count=22){
-    if(prefersReduced) return;
     for(let i=0;i<count;i++){
       const c=document.createElement('div'); c.className='confetti';
       c.style.left=x+'px'; c.style.top=y+'px';
@@ -519,7 +422,6 @@
     [0.2,0.4,0.5,0.6,0.8].forEach((p,i)=>setTimeout(()=>fireConfetti(innerWidth*p, innerHeight*0.3, color, 18), i*80));
   }
   function floatPlusOne(x,y,color){
-    if(prefersReduced) return;
     const f=document.createElement('div'); f.className='floater'; f.textContent='+١';
     f.style.left=x+'px'; f.style.top=y+'px'; f.style.setProperty('--accent',color);
     document.body.appendChild(f); setTimeout(()=>f.remove(),1300);
@@ -609,7 +511,6 @@
 
   // ============ VOTE ============
   async function castVote(gameId, originBtn){
-    if(votingLocked){ showToast('التصويت مقفل حالياً 🔒'); vibrate(50); return; }
     if(userVotedFor===gameId){ showToast('صوّتك مسجّل مسبقاً 👌'); vibrate(50); return; }
     const prevVote=userVotedFor;
     userVotedFor=gameId; setMyVote(gameId);
@@ -671,148 +572,14 @@
     document.body.style.overflow=''; currentModalGame=null;
   }
   document.getElementById('closeBtn').addEventListener('click',closeModal);
-  document.getElementById('backdrop').addEventListener('click',()=>{ const ov=currentOverlay(); if(ov) closeOverlay(ov); });
+  document.getElementById('backdrop').addEventListener('click',closeModal);
   document.getElementById('mVoteBtn').addEventListener('click',e=>{ if(currentModalGame) castVote(currentModalGame, e.currentTarget); });
-
-  // unified overlay handling: focus-trap + Escape for modal & panels
-  function currentOverlay(){
-    for(const id of ['modal','sharePanel','hostPanel']){
-      const el=document.getElementById(id);
-      if(el.classList.contains('open')) return el;
-    }
-    return null;
-  }
-  function closeOverlay(ov){ ov.id==='modal' ? closeModal() : closeDialog(ov); }
-  document.addEventListener('keydown',e=>{
-    const ov=currentOverlay(); if(!ov) return;
-    if(e.key==='Escape'){ e.preventDefault(); closeOverlay(ov); return; }
-    if(e.key==='Tab'){
-      const els=[...ov.querySelectorAll('button,[href],input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null && !x.disabled);
-      if(!els.length) return;
-      const first=els[0], last=els[els.length-1];
-      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
-    }
-  });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 
   function showToast(msg){
     const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
     clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
   }
-
-  // ============ DIALOG HELPERS (share / host panels) ============
-  let lastFocused=null;
-  function openDialog(el){
-    lastFocused=document.activeElement;
-    document.getElementById('backdrop').classList.add('open');
-    el.classList.add('open');
-    document.body.style.overflow='hidden';
-    const f=el.querySelector('button,input'); if(f) setTimeout(()=>f.focus(),60);
-  }
-  function closeDialog(el){
-    el.classList.remove('open');
-    document.getElementById('backdrop').classList.remove('open');
-    document.body.style.overflow='';
-    if(lastFocused && lastFocused.focus) lastFocused.focus();
-  }
-
-  // ============ LOCK + ROUND ============
-  function applyLock(locked){
-    votingLocked=!!locked;
-    document.body.classList.toggle('voting-locked', votingLocked);
-    const lb=document.getElementById('lockBtn');
-    if(lb) lb.textContent = votingLocked ? '🔓 فتح التصويت' : '🔒 قفل التصويت';
-  }
-  function applyRound(r){
-    r=Number(r)||0;
-    const seenStr=lsGet('gn_round_seen');
-    if(seenStr===null){ lsSet('gn_round_seen', String(r)); return; }
-    if(r!==parseInt(seenStr,10)){
-      lsSet('gn_round_seen', String(r));
-      clearMyVote();
-      renderGames();
-      if(currentModalGame) updateModalVoteBtn();
-      showToast('🔄 بدأت جولة جديدة — صوّت من جديد!');
-    }
-  }
-
-  // ============ HOST ACTIONS ============
-  async function setLockedState(val){
-    if(mode==='firebase'){ await dbRefs.set(dbRefs.ref(db,'meta/locked'), val); }
-    else { lsSet('gn_locked', val?'1':'0'); applyLock(val); }
-  }
-  async function resetAllVotes(){
-    if(mode==='firebase'){
-      await dbRefs.set(dbRefs.ref(db,'votes'), {g1:0,g2:0,g3:0,g4:0,g5:0});
-      await dbRefs.runTransaction(dbRefs.ref(db,'meta/round'), c=>(Number(c)||0)+1);
-    } else {
-      votes={g1:0,g2:0,g3:0,g4:0,g5:0}; lsSet('gn_votes', JSON.stringify(votes));
-      const nr=parseInt(lsGet('gn_round')||'0',10)+1; lsSet('gn_round', String(nr));
-      applyRound(nr); updateVoteUI(true);
-    }
-  }
-
-  // ============ SHARE PANEL ============
-  function buildShareUrl(){ const u=new URL(location.href); u.hash=''; return u.toString(); }
-  function openShare(){
-    const url=buildShareUrl();
-    document.getElementById('shareUrl').value=url;
-    document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data='+encodeURIComponent(url);
-    openDialog(document.getElementById('sharePanel'));
-  }
-  function copyShareUrl(){
-    const url=buildShareUrl();
-    const done=()=>showToast('انّسخ الرابط ✓');
-    if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(url).then(done).catch(()=>{}); }
-    else { const i=document.getElementById('shareUrl'); i.select(); try{ document.execCommand('copy'); done(); }catch(e){} }
-  }
-  document.getElementById('shareBtn').addEventListener('click', openShare);
-  document.getElementById('shareClose').addEventListener('click', ()=>closeDialog(document.getElementById('sharePanel')));
-  document.getElementById('copyUrlBtn').addEventListener('click', copyShareUrl);
-  document.getElementById('webShareBtn').addEventListener('click', ()=>{
-    const url=buildShareUrl();
-    if(navigator.share){ navigator.share({title:document.title, text:'وش نلعب اليوم؟ صوّت معنا', url}).catch(()=>{}); }
-    else copyShareUrl();
-  });
-
-  // ============ HOST PANEL ============
-  function openHost(){
-    document.getElementById('hostLoginField').style.display = hostUnlocked?'none':'block';
-    document.getElementById('hostControls').style.display   = hostUnlocked?'flex':'none';
-    openDialog(document.getElementById('hostPanel'));
-  }
-  function tryHostLogin(){
-    if(document.getElementById('hostPass').value===HOST_PASS){
-      hostUnlocked=true;
-      document.getElementById('hostLoginField').style.display='none';
-      document.getElementById('hostControls').style.display='flex';
-      applyLock(votingLocked); // refresh lock button label
-    } else { showToast('كلمة المرور غلط ❌'); vibrate(80); }
-  }
-  document.getElementById('hostClose').addEventListener('click', ()=>closeDialog(document.getElementById('hostPanel')));
-  document.getElementById('hostLoginBtn').addEventListener('click', tryHostLogin);
-  document.getElementById('hostPass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryHostLogin(); });
-  document.getElementById('lockBtn').addEventListener('click', ()=>setLockedState(!votingLocked));
-  document.getElementById('resetBtn').addEventListener('click', ()=>{
-    if(confirm('تصفير كل الأصوات وبدء جولة جديدة؟')){ resetAllVotes(); showToast('↺ صُفّرت الأصوات'); }
-  });
-
-  // ============ MUTE TOGGLE ============
-  function updateMuteBtn(){
-    const b=document.getElementById('muteBtn');
-    b.textContent=muted?'🔇':'🔊';
-    b.setAttribute('aria-pressed', muted?'true':'false');
-    b.setAttribute('aria-label', muted?'تشغيل الصوت':'كتم الصوت');
-  }
-  muted = lsGet('gn_muted')==='1';
-  updateMuteBtn();
-  document.getElementById('muteBtn').addEventListener('click', ()=>{
-    muted=!muted; lsSet('gn_muted', muted?'1':'0'); updateMuteBtn();
-    if(!muted) playVoteSound();
-  });
-
-  // open host panel via #host in the URL
-  if(location.hash==='#host') openHost();
 
   // ============ INIT ============
   renderGames();
