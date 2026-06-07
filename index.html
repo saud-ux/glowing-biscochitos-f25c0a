@@ -102,6 +102,21 @@
   @keyframes countBump{0%{transform:scale(1)}35%{transform:scale(1.6)}100%{transform:scale(1)}}
   .game.s1{--accent:#ff8a1f}.game.s2{--accent:var(--c2)}.game.s3{--accent:var(--c3)}.game.s4{--accent:var(--c4)}.game.s5{--accent:var(--c5)}
 
+  /* WAITING BANNER (above leader, when voting not started) */
+  .waiting-banner{
+    margin:50px 0 0;background:var(--bg-2);border:1px solid var(--c1);
+    border-radius:6px;padding:20px 26px;display:flex;align-items:center;gap:16px;
+    position:relative;overflow:hidden;
+  }
+  .waiting-banner::before{
+    content:"";position:absolute;top:0;right:0;left:0;height:3px;
+    background:linear-gradient(90deg,var(--c1),transparent);
+  }
+  .waiting-banner .wb-icon{font-size:30px;line-height:1;animation:wbPulse 1.8s ease-in-out infinite;}
+  @keyframes wbPulse{0%,100%{transform:scale(1);opacity:0.9}50%{transform:scale(1.15);opacity:1}}
+  .waiting-banner .wb-text{font-family:'Reem Kufi',sans-serif;font-size:18px;font-weight:600;color:var(--c1);}
+  .waiting-banner .wb-sub{font-size:13px;color:var(--ink-dim);margin-top:4px;font-family:'Readex Pro',sans-serif;font-weight:300;}
+
   /* CONFETTI + FLOATER */
   .floater{position:fixed;pointer-events:none;font-family:'Rubik Mono One',sans-serif;font-size:38px;color:var(--accent);z-index:95;animation:floatUp 1.2s cubic-bezier(.2,.7,.2,1) forwards;text-shadow:0 0 20px currentColor;}
   @keyframes floatUp{0%{opacity:0;transform:translate(-50%,0) scale(0.5)}20%{opacity:1;transform:translate(-50%,-20px) scale(1.2)}100%{opacity:0;transform:translate(-50%,-120px) scale(1)}}
@@ -230,8 +245,22 @@
   .hp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
   .hp-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--ink);padding:14px 10px;border-radius:8px;cursor:pointer;font-family:'Readex Pro',sans-serif;font-size:13px;transition:all 0.2s;text-align:center;}
   .hp-btn:hover{border-color:var(--c1);background:rgba(255,138,31,0.08);transform:translateY(-2px);}
+  .hp-btn.start-vote-btn{grid-column:span 2;background:rgba(78,194,124,0.1);border-color:var(--c2);color:var(--c2);font-weight:600;font-size:14px;padding:16px;}
+  .hp-btn.start-vote-btn:hover{background:var(--c2);color:#0a0a0c;}
   .hp-btn.close-vote-btn{grid-column:span 2;background:rgba(255,138,31,0.1);border-color:var(--c1);color:var(--c1);font-weight:600;font-size:14px;padding:16px;}
   .hp-btn.close-vote-btn:hover{background:var(--c1);color:#0a0a0c;}
+  .hp-status{
+    display:flex;align-items:center;gap:10px;padding:10px 14px;
+    background:var(--bg);border:1px solid var(--line);border-radius:8px;
+    margin-bottom:10px;font-size:13px;
+  }
+  .hp-status .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .hp-status.waiting .status-dot{background:var(--c1);box-shadow:0 0 8px var(--c1);}
+  .hp-status.open .status-dot{background:var(--c2);box-shadow:0 0 8px var(--c2);animation:dotPulse 1.5s ease-in-out infinite;}
+  .hp-status.closed .status-dot{background:var(--c3);}
+  .hp-status.waiting{color:var(--c1);}
+  .hp-status.open{color:var(--c2);}
+  .hp-status.closed{color:var(--c3);}
   .hp-custom{display:flex;gap:8px;}
   .hp-custom input{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:11px 14px;border-radius:8px;font-family:'Readex Pro',sans-serif;font-size:14px;}
   .hp-custom input:focus{outline:none;border-color:var(--c1);}
@@ -433,6 +462,15 @@
     </div>
   </section>
 
+  <!-- WAITING BANNER (shown when voting not started) -->
+  <div class="waiting-banner" id="waitingBanner" style="display:none;">
+    <div class="wb-icon">⏳</div>
+    <div>
+      <div class="wb-text">التصويت لم يبدأ بعد</div>
+      <div class="wb-sub">انتظر الهوست يفتح التصويت — راح تقدر تصوّت لحظة ما يبدأ</div>
+    </div>
+  </div>
+
   <div class="leader" id="leaderEl">
     <div>
       <div class="label"><span class="crown">👑</span> المتصدّر حالياً</div>
@@ -466,11 +504,19 @@
   <div class="hp-body">
 
     <div class="hp-section">
-      <span class="hp-label">رسائل سريعة</span>
+      <span class="hp-label">حالة التصويت</span>
+      <div class="hp-status waiting" id="hostStatus">
+        <span class="status-dot"></span>
+        <span id="hostStatusText">في الانتظار — لم يُفتح التصويت</span>
+      </div>
+    </div>
+
+    <div class="hp-section">
+      <span class="hp-label">التحكم بالتصويت</span>
       <div class="hp-grid">
         <button class="hp-btn" data-send="ready" data-text="جاهزين نصوّت؟ 🎮">🎮 جاهزين نصوّت؟</button>
-        <button class="hp-btn" data-send="start" data-text="التصويت بدأ! اختاروا 🔥">🔥 ابدأ التصويت</button>
         <button class="hp-btn" data-send="warn" data-text="آخر ٣٠ ثانية! ⏰">⏰ آخر ٣٠ ثانية</button>
+        <button class="hp-btn start-vote-btn" data-action="start">🔥 افتح التصويت للجميع</button>
         <button class="hp-btn close-vote-btn" data-action="close">🔒 أقفل التصويت وأعلن الفائزة</button>
       </div>
     </div>
@@ -614,7 +660,9 @@
   let db = null, dbRefs = null;
   let voterName = '';
   let votingClosed = false;
-let lastVoteTs=0;
+  let votingStarted = false;   // locked until host starts the round
+  let lastVoteTs=0;
+
   // ═══════════════════════════════════════════════════
   // LOCAL STORAGE HELPERS
   // ═══════════════════════════════════════════════════
@@ -706,7 +754,7 @@ let lastVoteTs=0;
           else if(r!==currentRound){
             currentRound=r; setMyVote(''); userVotedFor=null;
             renderGames(); updateModalVoteBtn();
-            showToast('🔄 جولة جديدة! صوّت من جديد');
+            showToast('🔄 جولة جديدة! انتظر الهوست يفتح التصويت');
           }
         });
 
@@ -720,18 +768,26 @@ let lastVoteTs=0;
           }
         });
 
-        // status (voting closed / winner)
+        // status (voting started / closed / winner)
         onValue(ref(db,'status'), snap=>{
-          const s=snap.val();
-          if(s&&s.closed){
-            votingClosed=true;
+          const s = snap.val();
+          const wasStarted = votingStarted;
+          if(s && s.closed){
+            votingClosed = true; votingStarted = false;
             showWinnerOverlay(s.winnerId);
-            renderGames();
           } else {
-            votingClosed=false;
+            votingClosed = false;
+            votingStarted = !!(s && s.started);
             hideWinnerOverlay();
-            renderGames();
+            // toast on transition: just opened
+            if(!wasStarted && votingStarted){
+              showToast('🔥 التصويت فُتح — صوّت الحين!');
+            }
           }
+          updateWaitingBanner();
+          updateHostStatusBadge();
+          renderGames();
+          updateModalVoteBtn();
         });
 
         // if voter name stored, write to FB
@@ -741,10 +797,13 @@ let lastVoteTs=0;
         return;
       } catch(e){ console.error('Firebase failed:',e); }
     }
-    // local fallback
+    // local fallback — no host, voting always open
     mode='local'; setConn('local','محلي');
+    votingStarted = true;
     document.getElementById('setupBanner').style.display='block';
     try{ const s=lsGet('gn_votes'); if(s) votes={g1:0,g2:0,g3:0,g4:0,g5:0,...JSON.parse(s)}; }catch(e){}
+    updateWaitingBanner();
+    updateHostStatusBadge();
     updateVoteUI(false);
   }
 
@@ -758,6 +817,34 @@ let lastVoteTs=0;
   // HELPERS
   // ═══════════════════════════════════════════════════
   function ar(n){ return String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
+
+  function updateWaitingBanner(){
+    const banner = document.getElementById('waitingBanner');
+    if(!banner) return;
+    // show only when Firebase mode AND not started AND not closed
+    if(mode==='firebase' && !votingStarted && !votingClosed){
+      banner.style.display='flex';
+    } else {
+      banner.style.display='none';
+    }
+  }
+
+  function updateHostStatusBadge(){
+    const badge = document.getElementById('hostStatus');
+    const txt = document.getElementById('hostStatusText');
+    if(!badge || !txt) return;
+    badge.classList.remove('waiting','open','closed');
+    if(votingClosed){
+      badge.classList.add('closed');
+      txt.textContent = 'مُقفل — تم إعلان الفائزة';
+    } else if(votingStarted){
+      badge.classList.add('open');
+      txt.textContent = 'مفتوح — الجميع يصوّت الحين';
+    } else {
+      badge.classList.add('waiting');
+      txt.textContent = mode==='local' ? 'وضع محلي — التصويت متاح دائماً' : 'في الانتظار — اضغط افتح التصويت';
+    }
+  }
 
   // AUDIO
   let audioCtx=null;
@@ -814,48 +901,54 @@ let lastVoteTs=0;
   // ═══════════════════════════════════════════════════
   // RENDER GAMES
   // ═══════════════════════════════════════════════════
-function renderGames(){
-  const grid=document.getElementById('gamesGrid');
-  grid.innerHTML=games.map(g=>{
-    const isVoted=userVotedFor===g.id;
-    const hasVoted=userVotedFor!==null;
-    const closed=votingClosed;
-    let btnCls='btn ', btnTxt='', disabled=false;
-    if(closed){
-      btnCls+='locked'; disabled=true;
-      btnTxt=isVoted?'✓ تصويتك':'التصويت أُقفل';
-    } else if(isVoted){
-      btnCls+='voted'; disabled=true;
-      btnTxt='تصويتك الحالي';
-    } else if(hasVoted){
-      btnCls+='primary'; btnTxt='غيّر لهذي 🔄';
-    } else {
-      btnCls+='primary'; btnTxt='صوّت 🔥';
-    }
-    return `
-    <article class="game ${g.size}" data-id="${g.id}">
-      <div class="icon">${g.icon}</div>
-      <span class="tag">${g.tag}</span>
-      <h2>${g.title}</h2>
-      <p class="idea">${g.idea}</p>
-      <p class="simple"><span class="label">شرح مبسّط</span>${g.simple}</p>
-      <div class="actions">
-        <button class="btn open-btn" data-id="${g.id}">شوف التفاصيل ←</button>
-        <button class="${btnCls} vote-btn" data-id="${g.id}" ${disabled?'disabled':''}>
-          ${isVoted?'✓ '+btnTxt:btnTxt}
-        </button>
-      </div>
-      <div class="vote-bar"><div class="fill" id="fill-${g.id}"></div></div>
-      <div class="vote-meta">
-        <span><span class="count count-${g.id}" id="cnt-${g.id}">٠</span> صوت</span>
-        <span class="pct" id="pct-${g.id}">٠٪</span>
-      </div>
-      <div class="num">${g.num}</div>
-    </article>`;
-  }).join('');
-  grid.querySelectorAll('.open-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openModal(b.dataset.id);}));
-  grid.querySelectorAll('.vote-btn:not([disabled])').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();castVote(b.dataset.id,b);}));
-}
+  function renderGames(){
+    const grid=document.getElementById('gamesGrid');
+    grid.innerHTML=games.map(g=>{
+      const isVoted=userVotedFor===g.id;
+      const hasVoted=userVotedFor!==null;
+      const closed=votingClosed;
+      let btnCls='btn ', btnTxt='', disabled=false;
+      if(closed){
+        btnCls+='locked'; disabled=true;
+        btnTxt=isVoted?'✓ تصويتك':'التصويت أُقفل';
+      } else if(!votingStarted){
+        btnCls+='locked'; disabled=true;
+        btnTxt='ينتظر بداية التصويت ⏳';
+      } else if(isVoted){
+        btnCls+='voted'; disabled=true;
+        btnTxt='تصويتك الحالي';
+      } else if(hasVoted){
+        btnCls+='primary'; btnTxt='غيّر لهذي 🔄';
+      } else {
+        btnCls+='primary'; btnTxt='صوّت 🔥';
+      }
+      return `
+      <article class="game ${g.size}" data-id="${g.id}">
+        <div class="icon">${g.icon}</div>
+        <span class="tag">${g.tag}</span>
+        <h2>${g.title}</h2>
+        <p class="idea">${g.idea}</p>
+        <p class="simple"><span class="label">شرح مبسّط</span>${g.simple}</p>
+        <div class="actions">
+          <button class="btn open-btn" data-id="${g.id}">شوف التفاصيل ←</button>
+          <button class="${btnCls} vote-btn" data-id="${g.id}" ${disabled?'disabled':''}>
+            ${isVoted?'✓ '+btnTxt:btnTxt}
+          </button>
+        </div>
+        <div class="vote-bar"><div class="fill" id="fill-${g.id}"></div></div>
+        <div class="vote-meta">
+          <span><span class="count count-${g.id}" id="cnt-${g.id}">٠</span> صوت</span>
+          <span class="pct" id="pct-${g.id}">٠٪</span>
+        </div>
+        <div class="num">${g.num}</div>
+      </article>`;
+    }).join('');
+    grid.querySelectorAll('.open-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openModal(b.dataset.id);}));
+    grid.querySelectorAll('.vote-btn:not([disabled])').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();castVote(b.dataset.id,b);}));
+    // re-paint counts/bars after innerHTML wipe
+    updateVoteUI(false);
+  }
+
   function updateVoteUI(animated=false,changedId=null){
     const total=Object.values(votes).reduce((a,b)=>a+(b||0),0);
     const totalEl=document.getElementById('totalVotes');
@@ -909,46 +1002,48 @@ function renderGames(){
   // ═══════════════════════════════════════════════════
   // CAST VOTE — ONE VOTE ONLY
   // ═══════════════════════════════════════════════════
- async function castVote(gameId,originBtn){
- if(Date.now()-lastVoteTs<1000){ showToast('انتظر ثانية ⏱️'); return; }
-lastVoteTs=Date.now();
-  if(votingClosed){ showToast('التصويت أُقفل ✋'); return; }
-  if(userVotedFor===gameId){ showToast('هذا تصويتك الحالي'); return; }
+  async function castVote(gameId,originBtn){
+    if(Date.now()-lastVoteTs<1000){ showToast('انتظر ثانية ⏱️'); return; }
+    lastVoteTs=Date.now();
+    if(votingClosed){ showToast('التصويت أُقفل ✋'); return; }
+    if(!votingStarted){ showToast('⏳ ينتظر الهوست يفتح التصويت'); return; }
+    if(userVotedFor===gameId){ showToast('هذا تصويتك الحالي'); return; }
 
-  const previousVote=userVotedFor;
-  const isSwitching=previousVote!==null;
+    const previousVote=userVotedFor;
+    const isSwitching=previousVote!==null;
 
-  userVotedFor=gameId; setMyVote(gameId);
-  const color=colorMap[gameId];
+    userVotedFor=gameId; setMyVote(gameId);
+    const color=colorMap[gameId];
 
-  vibrate([30,40,80]); playVoteSound(); screenFlash(color);
-  if(originBtn){
-    const r=originBtn.getBoundingClientRect();
-    fireConfetti(r.left+r.width/2,r.top+r.height/2,color,28);
-    floatPlusOne(r.left+r.width/2,r.top+r.height/2-10,color);
+    vibrate([30,40,80]); playVoteSound(); screenFlash(color);
+    if(originBtn){
+      const r=originBtn.getBoundingClientRect();
+      fireConfetti(r.left+r.width/2,r.top+r.height/2,color,28);
+      floatPlusOne(r.left+r.width/2,r.top+r.height/2-10,color);
+    }
+
+    renderGames(); updateModalVoteBtn();
+
+    try{
+      if(mode==='firebase'&&dbRefs){
+        const {ref,runTransaction,set}=dbRefs;
+        if(isSwitching){
+          await runTransaction(ref(db,'votes/'+previousVote),cur=>Math.max(0,(cur||0)-1));
+        }
+        await runTransaction(ref(db,'votes/'+gameId),cur=>(cur||0)+1);
+        await set(ref(db,'voters/'+voterId),{name:voterName,game:gameId,round:currentRound||0,ts:Date.now()});
+      } else {
+        if(isSwitching) votes[previousVote]=Math.max(0,(votes[previousVote]||0)-1);
+        votes[gameId]=(votes[gameId]||0)+1;
+        lsSet('gn_votes',JSON.stringify(votes));
+        updateVoteUI(true,gameId);
+      }
+    } catch(e){ console.error(e); showToast('صار خطأ، حاول مرة ثانية'); }
+
+    const g=games.find(x=>x.id===gameId);
+    showToast(isSwitching?`🔄 غيّرت تصويتك إلى "${g.title}"`:`🔥 صوّتك انسجل لـ "${g.title}"`);
   }
 
-  renderGames(); updateModalVoteBtn();
-
-  try{
-    if(mode==='firebase'&&dbRefs){
-      const {ref,runTransaction,set}=dbRefs;
-      if(isSwitching){
-        await runTransaction(ref(db,'votes/'+previousVote),cur=>Math.max(0,(cur||0)-1));
-      }
-      await runTransaction(ref(db,'votes/'+gameId),cur=>(cur||0)+1);
-      await set(ref(db,'voters/'+voterId),{name:voterName,game:gameId,round:currentRound||0,ts:Date.now()});
-    } else {
-      if(isSwitching) votes[previousVote]=Math.max(0,(votes[previousVote]||0)-1);
-      votes[gameId]=(votes[gameId]||0)+1;
-      lsSet('gn_votes',JSON.stringify(votes));
-      updateVoteUI(true,gameId);
-    }
-  } catch(e){ console.error(e); showToast('صار خطأ، حاول مرة ثانية'); }
-
-  const g=games.find(x=>x.id===gameId);
-  showToast(isSwitching?`🔄 غيّرت تصويتك إلى "${g.title}"`:`🔥 صوّتك انسجل لـ "${g.title}"`);
-}
   // ═══════════════════════════════════════════════════
   // WINNER OVERLAY
   // ═══════════════════════════════════════════════════
@@ -991,14 +1086,11 @@ lastVoteTs=Date.now();
   // ═══════════════════════════════════════════════════
   // VOTER PANEL (host side)
   // ═══════════════════════════════════════════════════
-  let voterFeedItems=[];
   function updateVoterPanel(allVoters){
     const round=currentRound||0;
-    // filter voters who voted in this round
     const thisRound=Object.values(allVoters).filter(v=>v.game&&v.round===round&&v.name);
     thisRound.sort((a,b)=>(b.ts||0)-(a.ts||0));
 
-    // FEED
     const feed=document.getElementById('voterFeed');
     if(!feed) return;
     if(thisRound.length===0){
@@ -1014,7 +1106,6 @@ lastVoteTs=Date.now();
       }).join('');
     }
 
-    // GROUPED
     const grouped=document.getElementById('voterGrouped');
     if(!grouped) return;
     const total=thisRound.length;
@@ -1101,30 +1192,39 @@ lastVoteTs=Date.now();
       showToast('📢 أُرسلت للجميع');
     }catch(e){ showToast('فشل الإرسال'); }
   }
+  async function hostStartVoting(){
+    if(mode!=='firebase'){ showToast('تحتاج Firebase'); return; }
+    if(votingStarted){ showToast('التصويت مفتوح بالفعل ✅'); return; }
+    try{
+      const {ref,set}=dbRefs;
+      await set(ref(db,'status'),{started:true,closed:false,winnerId:null});
+      await set(ref(db,'broadcast'),{id:Date.now(),text:'التصويت بدأ! اختاروا 🔥',kind:'start',ts:Date.now()});
+      showToast('🔥 التصويت مفتوح للجميع');
+    }catch(e){ showToast('فشل فتح التصويت'); }
+  }
   async function hostCloseVoting(){
     if(mode!=='firebase'){ showToast('تحتاج Firebase'); return; }
-    // find winner
     let winnerId=null,max=-1;
     games.forEach(g=>{ if((votes[g.id]||0)>max){ max=votes[g.id]||0; winnerId=g.id; } });
-    if(!winnerId){ showToast('لا يوجد أصوات بعد!'); return; }
+    if(!winnerId || max===0){ showToast('لا يوجد أصوات بعد!'); return; }
     const {ref,set}=dbRefs;
-    await set(ref(db,'status'),{closed:true,winnerId,ts:Date.now()});
+    await set(ref(db,'status'),{closed:true,started:false,winnerId,ts:Date.now()});
     await set(ref(db,'broadcast'),{id:Date.now(),text:'التصويت أُقفل — شوفوا الفائزة! 🏆',kind:'end',ts:Date.now()});
     showToast('🔒 التصويت أُقفل والفائزة أُعلنت');
   }
   async function hostReset(){
-    if(!confirm('تصفير كل الأصوات وبدء جولة جديدة؟')) return;
+    if(!confirm('تصفير كل الأصوات وبدء جولة جديدة؟ (التصويت سيكون مُقفل حتى تفتحه)')) return;
     if(mode==='firebase'&&dbRefs){
       const {ref,set}=dbRefs;
       await set(ref(db,'votes'),{g1:0,g2:0,g3:0,g4:0,g5:0});
       await set(ref(db,'ready'),null);
-      await set(ref(db,'status'),{closed:false,winnerId:null});
+      await set(ref(db,'status'),{started:false,closed:false,winnerId:null});
       await set(ref(db,'round'),(currentRound||0)+1);
-      showToast('🔄 جولة جديدة بدأت');
+      showToast('🔄 جولة جديدة — اضغط افتح التصويت');
     } else {
       votes={g1:0,g2:0,g3:0,g4:0,g5:0}; lsSet('gn_votes',JSON.stringify(votes));
-      setMyVote(''); userVotedFor=null; votingClosed=false;
-      renderGames(); updateVoteUI(false); showToast('🔄 صُفّرت الأصوات');
+      setMyVote(''); userVotedFor=null; votingClosed=false; votingStarted=true;
+      renderGames(); updateVoteUI(false); updateHostStatusBadge(); showToast('🔄 صُفّرت الأصوات');
     }
   }
 
@@ -1135,6 +1235,7 @@ lastVoteTs=Date.now();
   document.querySelectorAll('#hostPanel [data-send]').forEach(b=>{
     b.addEventListener('click',()=>hostSend(b.dataset.text,b.dataset.send));
   });
+  document.querySelector('[data-action="start"]').addEventListener('click',hostStartVoting);
   document.querySelector('[data-action="close"]').addEventListener('click',hostCloseVoting);
   document.getElementById('hostCustomSend').addEventListener('click',()=>{
     const inp=document.getElementById('hostCustomInput'); const v=inp.value.trim();
@@ -1177,23 +1278,29 @@ lastVoteTs=Date.now();
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow='hidden';
   }
-function updateModalVoteBtn(){
-  const btn=document.getElementById('mVoteBtn');
-  if(votingClosed){
-    btn.className='btn locked';
-    btn.textContent=userVotedFor===currentModalGame?'✓ تصويتك (مُقفل)':'التصويت أُقفل ✋';
-    btn.disabled=true; return;
+  function updateModalVoteBtn(){
+    const btn=document.getElementById('mVoteBtn');
+    if(!btn) return;
+    if(votingClosed){
+      btn.className='btn locked';
+      btn.textContent=userVotedFor===currentModalGame?'✓ تصويتك (مُقفل)':'التصويت أُقفل ✋';
+      btn.disabled=true; return;
+    }
+    if(!votingStarted){
+      btn.className='btn locked';
+      btn.textContent='ينتظر بداية التصويت ⏳';
+      btn.disabled=true; return;
+    }
+    if(userVotedFor===currentModalGame){
+      btn.className='btn voted'; btn.textContent='✓ تصويتك الحالي';
+      btn.disabled=true; return;
+    }
+    if(userVotedFor!==null){
+      btn.className='btn primary'; btn.textContent='غيّر تصويتك لهذي 🔄';
+      btn.disabled=false; return;
+    }
+    btn.className='btn primary'; btn.textContent='صوّت لهالّلعبة 🔥'; btn.disabled=false;
   }
-  if(userVotedFor===currentModalGame){
-    btn.className='btn voted'; btn.textContent='✓ تصويتك الحالي';
-    btn.disabled=true; return;
-  }
-  if(userVotedFor!==null){
-    btn.className='btn primary'; btn.textContent='غيّر تصويتك لهذي 🔄';
-    btn.disabled=false; return;
-  }
-  btn.className='btn primary'; btn.textContent='صوّت لهالّلعبة 🔥'; btn.disabled=false;
-}
   function closeModal(){
     document.getElementById('backdrop').classList.remove('open');
     document.getElementById('modal').classList.remove('open');
@@ -1286,6 +1393,8 @@ function updateModalVoteBtn(){
   // ═══════════════════════════════════════════════════
   renderGames();
   updateVoteUI(false);
+  updateWaitingBanner();
+  updateHostStatusBadge();
   initNameEntry();
   initStorage();
 </script>
