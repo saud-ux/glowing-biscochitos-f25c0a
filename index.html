@@ -11,7 +11,7 @@
   :root {
     --bg:#0e0e10; --bg-2:#161618; --bg-3:#1d1d20; --line:#2a2a2f;
     --ink:#f4f1ea; --ink-dim:#a8a39b; --ink-faint:#6b675f;
-    --c1:#ff8a1f; --c2:#4ec27c; --c3:#ff4757; --c4:#5b8dff; --c5:#ff4d8d;
+    --c1:#f4f1ea; --c2:#4ec27c; --c3:#ff4757; --c4:#5b8dff; --c5:#ff4d8d;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{background:var(--bg);color:var(--ink);font-family:'Readex Pro',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
@@ -397,8 +397,9 @@
 <!-- NAME ENTRY OVERLAY -->
 <div class="name-overlay" id="nameOverlay">
   <div class="name-card">
-    <h2 style="font-family:'Readex Pro',sans-serif;font-weight:700;">بدون اسم ما تدخل، هذي القاعدة</h2>
-    
+    <span class="nc-icon">🎮</span>
+    <h2>أهلاً بك في ألعاب البث!</h2>
+    <p>اكتب اسمك عشان يطلع مع تصويتك ويعرف الهوست مين صوّت لإيش</p>
     <input type="text" id="nameInput" placeholder="اسمك هنا..." maxlength="20" autocomplete="off">
     <button class="nc-btn" id="nameSubmit">ادخل →</button>
   </div>
