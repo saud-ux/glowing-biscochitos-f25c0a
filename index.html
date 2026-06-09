@@ -74,7 +74,8 @@
   .game.leading{border-color:var(--accent);}
   .game.s1{grid-column:span 7}.game.s2{grid-column:span 5}
   .game.s3{grid-column:span 4}.game.s4{grid-column:span 4}.game.s5{grid-column:span 4}
-  @media(max-width:900px){.game.s1,.game.s2,.game.s3,.game.s4,.game.s5{grid-column:span 12}}
+  .game.s6{grid-column:span 6}.game.s7{grid-column:span 6}
+  @media(max-width:900px){.game.s1,.game.s2,.game.s3,.game.s4,.game.s5,.game.s6,.game.s7{grid-column:span 12}}
   .game .num{font-family:'Rubik Mono One',sans-serif;font-size:60px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--accent);position:absolute;bottom:14px;left:22px;opacity:0.28;}
   .game .icon{font-size:26px;margin-bottom:12px;}
   .game h2{font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:30px;letter-spacing:-0.01em;margin-bottom:10px;color:var(--accent);}
@@ -100,7 +101,13 @@
   .vote-meta .count{display:inline-block;min-width:12px;}
   .vote-meta .count.bump{animation:countBump 0.6s ease-out;color:var(--accent);}
   @keyframes countBump{0%{transform:scale(1)}35%{transform:scale(1.6)}100%{transform:scale(1)}}
-  .game.s1{--accent:#ff8a1f}.game.s2{--accent:var(--c2)}.game.s3{--accent:var(--c3)}.game.s4{--accent:var(--c4)}.game.s5{--accent:var(--c5)}
+  .game.s1{--accent:#ff8a1f}.game.s2{--accent:var(--c2)}.game.s3{--accent:var(--c3)}.game.s4{--accent:var(--c4)}.game.s5{--accent:var(--c5)}.game.s6{--accent:#8b5cf6}.game.s7{--accent:#fe2c55}
+  .btn.play-link{color:var(--accent);border-color:var(--accent);}
+  .btn.play-link:hover{background:var(--accent);color:#0a0a0c;transform:translateY(-1px);box-shadow:0 6px 20px -8px var(--accent);}
+  .btn.host-link{color:var(--ink-faint);border-color:var(--line);}
+  .btn.host-link:hover{background:var(--ink);color:var(--bg);}
+  .modal .foot .foot-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .modal .foot{flex-wrap:wrap;}
 
   /* WAITING BANNER (above leader, when voting not started) */
   .waiting-banner{
@@ -562,7 +569,10 @@
   <div class="body" id="mBody"></div>
   <div class="foot">
     <div class="count-display"><span>عدد الأصوات الحالية:</span><strong id="mCount">٠</strong></div>
-    <button class="btn primary" id="mVoteBtn">صوّت لهالّلعبة</button>
+    <div class="foot-actions">
+      <div id="mPlayLinks"></div>
+      <button class="btn primary" id="mVoteBtn">صوّت لهالّلعبة</button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -642,16 +652,31 @@
       simple:'تخيّل إنك تشرح "البيتزا" لصديقك بس ممنوع تقول: إيطاليا، جبن، فرن، دائرية، وجبة. صعب صح؟ هذي هي المتعة! تعطى كلمة سرية وقائمة كلمات ممنوعة، وتشرحها بأي طريقة ثانية. أول واحد يخمن صح يأخذ النقاط.',
       steps:['الهوست سعود يعطي لاعب كلمة سرية وقائمة كلمات محظورة','اللاعب يشرح الكلمة للبقية بأي طريقة','ما يقدر يقول أي كلمة من القائمة المحظورة','البقية عندهم ٦٠ ثانية يخمنون','أول واحد يخمن صح يأخذ النقاط','لو قال اللاعب كلمة محظورة يخسر دوره'],
       example:{ title:'الكلمة السرية: برج إيفل', rows:[['المحظورة','فرنسا، باريس، برج، حديد، سياحة'],['الشرح الصح','"بناء ضخم جداً رمز لدولة أوروبية، بنوه في القرن التاسع عشر، الناس يصورون قدامه، موجود في عاصمة الموضة والعطور"'],['لاعب ١','"برج إيفل" ← يأخذ النقاط ✓']] },
-      moreExamples:[['القهوة','مشروب، بن، حار، كافيه، صباح'],['الكعبة','مكة، حج، إسلام، طواف، مسجد'],['الجمل','صحراء، حيوان، سنام، عرب، ركوب'],['البيتزا','إيطاليا، جبن، فرن، دائرية، وجبة']] }
+      moreExamples:[['القهوة','مشروب، بن، حار، كافيه، صباح'],['الكعبة','مكة، حج، إسلام، طواف، مسجد'],['الجمل','صحراء، حيوان، سنام، عرب، ركوب'],['البيتزا','إيطاليا، جبن، فرن، دائرية، وجبة']] },
+    { id:'g6', size:'s6', num:'٠٦', icon:'🌟', tag:'CELEBRITY HINTS', title:'من هو المشهور؟',
+      idea:'خمّن شخصية مشهورة من التلميحات — كل ما أخذت تلميحات أقل كانت نقاطك أكثر!',
+      simple:'الهوست يحط اسم شخصية مشهورة مع ١٠ تلميحات. التلميح الأول يطلع تلقائياً، وكل لاعب يختار إذا يبغى تلميح إضافي — بس كل ما أخذت تلميحات أكثر كل ما انخفضت نقاطك. خمّن بأقل تلميحات ممكنة وخذ أكبر نقطة!',
+      steps:['الهوست يحط اسم شخصية مشهورة و١٠ تلميحات عنها','التلميح الأول يظهر تلقائياً لجميع اللاعبين','كل لاعب يختار: يخمّن الحين أو يطلب تلميح إضافي','كل تلميح إضافي تاخذه تنقص نقاطك','أول لاعب يخمّن صح يأخذ النقاط بناءً على عدد التلميحات اللي استخدمها'],
+      rules:['⭐ خمّن من التلميح الأول = أعلى نقطة ممكنة','📉 كل تلميح إضافي تطلبه = نقاط أقل','🚫 لو ما خمّن أحد بعد كل التلميحات = لا أحد يأخذ نقطة'],
+      example:{ title:'مثال: الشخصية هي رونالدو', rows:[['تلميح ١','مواليد ١٩٨٥ — في البرتغال'],['تلميح ٢','يلعب كرة القدم محترف'],['تلميح ٣','اسمه الأول يبدأ بحرف ك'],['لاعب ١ خمّن','رونالدو ✓ — بعد ٣ تلميحات = ٨٠ نقطة'],['لو خمّن من ١','كان يأخذ ١٠٠ نقطة كاملة']] },
+      playUrl:'https://new-game-kyy1.onrender.com/' },
+    { id:'g7', size:'s7', num:'٠٧', icon:'🎵', tag:'TIKTOK QUIZ', title:'كويز تيك توك',
+      idea:'كويز مباشر يتحكم فيه الهوست — الجميع يجاوب من جوالاتهم في نفس الوقت!',
+      simple:'الهوست يشغّل الكويز من صفحة الهوست على شاشة كبيرة، والمتسابقون يدخلون من صفحة اللاعبين على جوالاتهم. الهوست يتحكم في تقدم الأسئلة والنتائج تظهر مباشرة للجميع.',
+      steps:['الهوست يفتح صفحة الهوست على شاشة كبيرة أو تلفزيون','المتسابقون يفتحون صفحة اللاعبين على جوالاتهم','الهوست يبدأ الكويز ويتحكم في الأسئلة','كل لاعب يجاوب من جواله في الوقت المحدد','الترتيب والنتائج تظهر مباشرة للجميع بعد كل سؤال'],
+      rules:['⏰ كل سؤال له وقت محدد للإجابة','🏆 الأسرع في الإجابة الصحيحة يأخذ أكثر نقاط','📱 تحتاج جوال وإنترنت للمشاركة'],
+      example:{ title:'طريقة الدخول للعبة', rows:[['الهوست','يفتح صفحة الهوست على جهازه أو التلفزيون'],['اللاعبون','يفتحون صفحة اللاعبين على جوالاتهم'],['تحكم الهوست','يبدأ الأسئلة ويتحكم في تقدم اللعبة'],['النتيجة','الترتيب يظهر مباشرة بعد كل سؤال']] },
+      playUrl:'https://tiktok-quiz-sozp.onrender.com/play',
+      hostUrl:'https://tiktok-quiz-sozp.onrender.com/host' }
   ];
 
-  const colorMap = { g1:'#ff8a1f', g2:'#4ec27c', g3:'#ff4757', g4:'#5b8dff', g5:'#ff4d8d' };
-  const colorRgb = { g1:'255,138,31', g2:'78,194,124', g3:'255,71,87', g4:'91,141,255', g5:'255,77,141' };
+  const colorMap = { g1:'#ff8a1f', g2:'#4ec27c', g3:'#ff4757', g4:'#5b8dff', g5:'#ff4d8d', g6:'#8b5cf6', g7:'#fe2c55' };
+  const colorRgb = { g1:'255,138,31', g2:'78,194,124', g3:'255,71,87', g4:'91,141,255', g5:'255,77,141', g6:'139,92,246', g7:'254,44,85' };
 
   // ═══════════════════════════════════════════════════
   // STATE
   // ═══════════════════════════════════════════════════
-  let votes = { g1:0, g2:0, g3:0, g4:0, g5:0 };
+  let votes = { g1:0, g2:0, g3:0, g4:0, g5:0, g6:0, g7:0 };
   let userVotedFor = null;
   let currentModalGame = null;
   let previousLeader = null;
@@ -732,7 +757,7 @@
         // votes
         onValue(ref(db,'votes'), snap=>{
           const fresh = snap.val()||{};
-          const merged = {g1:0,g2:0,g3:0,g4:0,g5:0,...fresh};
+          const merged = {g1:0,g2:0,g3:0,g4:0,g5:0,g6:0,g7:0,...fresh};
           const old={...votes}; votes=merged;
           let changed=null;
           for(const g of games) if((votes[g.id]||0)>(old[g.id]||0)) changed=g.id;
@@ -801,7 +826,7 @@
     mode='local'; setConn('local','محلي');
     votingStarted = true;
     document.getElementById('setupBanner').style.display='block';
-    try{ const s=lsGet('gn_votes'); if(s) votes={g1:0,g2:0,g3:0,g4:0,g5:0,...JSON.parse(s)}; }catch(e){}
+    try{ const s=lsGet('gn_votes'); if(s) votes={g1:0,g2:0,g3:0,g4:0,g5:0,g6:0,g7:0,...JSON.parse(s)}; }catch(e){}
     updateWaitingBanner();
     updateHostStatusBadge();
     updateVoteUI(false);
@@ -931,6 +956,7 @@
         <p class="simple"><span class="label">شرح مبسّط</span>${g.simple}</p>
         <div class="actions">
           <button class="btn open-btn" data-id="${g.id}">شوف التفاصيل ←</button>
+          ${g.playUrl?`<a href="${g.playUrl}" target="_blank" rel="noopener" class="btn play-link">العب ↗</a>`:''}
           <button class="${btnCls} vote-btn" data-id="${g.id}" ${disabled?'disabled':''}>
             ${isVoted?'✓ '+btnTxt:btnTxt}
           </button>
@@ -1216,13 +1242,13 @@
     if(!confirm('تصفير كل الأصوات وبدء جولة جديدة؟ (التصويت سيكون مُقفل حتى تفتحه)')) return;
     if(mode==='firebase'&&dbRefs){
       const {ref,set}=dbRefs;
-      await set(ref(db,'votes'),{g1:0,g2:0,g3:0,g4:0,g5:0});
+      await set(ref(db,'votes'),{g1:0,g2:0,g3:0,g4:0,g5:0,g6:0,g7:0});
       await set(ref(db,'ready'),null);
       await set(ref(db,'status'),{started:false,closed:false,winnerId:null});
       await set(ref(db,'round'),(currentRound||0)+1);
       showToast('🔄 جولة جديدة — اضغط افتح التصويت');
     } else {
-      votes={g1:0,g2:0,g3:0,g4:0,g5:0}; lsSet('gn_votes',JSON.stringify(votes));
+      votes={g1:0,g2:0,g3:0,g4:0,g5:0,g6:0,g7:0}; lsSet('gn_votes',JSON.stringify(votes));
       setMyVote(''); userVotedFor=null; votingClosed=false; votingStarted=true;
       renderGames(); updateVoteUI(false); updateHostStatusBadge(); showToast('🔄 صُفّرت الأصوات');
     }
@@ -1274,6 +1300,13 @@
     document.getElementById('mBody').innerHTML=body;
     document.getElementById('mCount').textContent=ar(votes[gameId]||0);
     updateModalVoteBtn();
+    const playLinks=document.getElementById('mPlayLinks');
+    if(playLinks){
+      let pl='';
+      if(g.playUrl) pl+=`<a href="${g.playUrl}" target="_blank" rel="noopener" class="btn play-link">العب ↗</a>`;
+      if(g.hostUrl) pl+=`<a href="${g.hostUrl}" target="_blank" rel="noopener" class="btn host-link">الهوست ↗</a>`;
+      playLinks.innerHTML=pl;
+    }
     document.getElementById('backdrop').classList.add('open');
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow='hidden';
